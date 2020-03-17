@@ -1,0 +1,10 @@
+@import "~antd/dist/antd.css";
+
+.App {
+  text-align: center;
+}
+
+.searchButton > span {
+  width: 30%;
+  margin: 0 8px 8px 0;
+}
