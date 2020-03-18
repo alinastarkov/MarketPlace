@@ -13,3 +13,4 @@
 
 ##### Note: Venv can be terminated by typing deactivate 
 9. Install openssl if necessary: brew install openssl
+10. Install redis if neccessary: brew install redis 
