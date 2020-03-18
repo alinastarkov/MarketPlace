@@ -10,4 +10,6 @@
 6. Install front-end dependencies: cd front-end && npm install 
 7. Start front-end: yarn start
 
+
 ##### Note: Venv can be terminated by typing deactivate 
+9. Install openssl if necessary: brew install openssl
