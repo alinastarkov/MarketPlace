@@ -1,8 +1,8 @@
 import React from "react";
-import { Modal, Form, Input, Checkbox } from "antd";
+import { Modal, Form, Input, Checkbox, Alert } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
-export const SignInPopup = ({ visible, onCreate, onCancel }) => {
+export const SignInPopup = ({ visible, onCreate, onCancel, hasError }) => {
   const [form] = Form.useForm();
   return (
     <Modal
@@ -48,10 +48,17 @@ export const SignInPopup = ({ visible, onCreate, onCancel }) => {
             <Checkbox>Remember me</Checkbox>
           </Form.Item>
 
-          <a className="login-form-forgot" href="">
+          {/* <a className="login-form-forgot" href="">
             Forgot password
-          </a>
+          </a> */}
         </Form.Item>
+        {!hasError ? (
+          <Form.Item></Form.Item>
+        ) : (
+          <Form.Item>
+            <Alert message="Your user name or password is wrong" type="error" />
+          </Form.Item>
+        )}
       </Form>
     </Modal>
   );

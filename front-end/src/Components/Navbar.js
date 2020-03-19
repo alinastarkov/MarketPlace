@@ -3,7 +3,7 @@ import { Layout, Menu } from "antd";
 import { SignInPopup } from "../Components/Popup/SignInPopup";
 import { SignUpPopup } from "../Components/Popup/SignUpPopup";
 import * as UserManagement from "../API/UserManagementAPI";
-
+import { Link } from "react-router-dom";
 const { Header } = Layout;
 
 export function Navbar() {
@@ -12,6 +12,8 @@ export function Navbar() {
   const [isSignedin, setSignin] = useState(
     localStorage.getItem("token") ? true : false
   );
+  const [signInError, setSignInError] = useState(false);
+  const [signUpError, setSignUpError] = useState(false);
 
   const handleSigninClick = () => {
     setSigninPopup(true);
@@ -27,10 +29,15 @@ export function Navbar() {
 
   const onCreateSignin = values => {
     UserManagement.login(values).then(reponse => {
-      localStorage.setItem("token", reponse.token);
-      setSignin(true);
+      if (!reponse.error) {
+        localStorage.setItem("token", reponse.token);
+        setSignin(true);
+        setSignInError(false);
+        setSigninPopup(false);
+      } else {
+        setSignInError(true);
+      }
     });
-    setSigninPopup(false);
   };
 
   const onCancelSignUp = () => {
@@ -38,8 +45,16 @@ export function Navbar() {
   };
 
   const onCreateSignUp = values => {
-    UserManagement.signup(values);
-    setSignupPopup(false);
+    UserManagement.signup(values).then(reponse => {
+      if (!reponse.error) {
+        localStorage.setItem("token", reponse.token);
+        setSignin(true);
+        setSignUpError(false);
+        setSignupPopup(false);
+      } else {
+        setSignUpError(true);
+      }
+    });
   };
 
   const handleLogout = () => {
@@ -52,15 +67,18 @@ export function Navbar() {
       className="menu-item-group"
       theme="dark"
       mode="horizontal"
-      defaultSelectedKeys={["1"]}
+      defaultSelectedKeys={["2"]}
     >
       <Menu.Item key="1" onClick={handleLogout}>
-        My profile
+        <Link to="/sell">Sell your clothes </Link>
       </Menu.Item>
       <Menu.Item key="2" onClick={handleLogout}>
+        My profile
+      </Menu.Item>
+      <Menu.Item key="3" onClick={handleLogout}>
         Logout
       </Menu.Item>
-      <Menu.Item key="3">Your basket</Menu.Item>
+      <Menu.Item key="4">Your basket</Menu.Item>
     </Menu>
   );
 
@@ -78,6 +96,7 @@ export function Navbar() {
         visible={signInVisible}
         onCreate={onCreateSignin}
         onCancel={onCancelSignin}
+        hasError={signInError}
       />
       <Menu.Item key="2" onClick={handleSignupClick}>
         Sign up
@@ -86,6 +105,7 @@ export function Navbar() {
         visible={signUpVisible}
         onCreate={onCreateSignUp}
         onCancel={onCancelSignUp}
+        hasError={signUpError}
       />
       <Menu.Item key="3">Your basket</Menu.Item>
     </Menu>

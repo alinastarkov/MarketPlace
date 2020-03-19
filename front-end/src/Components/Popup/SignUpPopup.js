@@ -1,7 +1,7 @@
 import React from "react";
-import { Modal, Form, Input } from "antd";
+import { Modal, Form, Input, Alert } from "antd";
 
-export const SignUpPopup = ({ visible, onCreate, onCancel }) => {
+export const SignUpPopup = ({ visible, onCreate, onCancel, hasError }) => {
   const [form] = Form.useForm();
   return (
     <Modal
@@ -71,6 +71,16 @@ export const SignUpPopup = ({ visible, onCreate, onCancel }) => {
         >
           <Input.Password allowClear placeholder="your password" />
         </Form.Item>
+        {!hasError ? (
+          <Form.Item></Form.Item>
+        ) : (
+          <Form.Item>
+            <Alert
+              message="There is an error in your sign up. Please try a different username"
+              type="error"
+            />
+          </Form.Item>
+        )}
       </Form>
     </Modal>
   );

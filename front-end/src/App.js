@@ -1,41 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
 import "./App.css";
-import { Input } from "antd";
-import { getItems } from "../src/API/ItemsAPI";
 import { Layout } from "antd";
 import { Navbar } from "../src/Components/Navbar";
+import MainPage from "../src/Components/MainPage";
+import SellItemForm from "../src/Components/Forms/SellItemForm";
 
-const { Search } = Input;
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 const { Content, Footer } = Layout;
 
 function App() {
-  const [text, setData] = useState("Nothing was clicked");
-
-  const handleItemSearch = () => {
-    getItems().then(response => setData(response));
-  };
-
   return (
-    <Layout className="layout">
-      <Navbar />
-      <Content style={{ padding: "0 50px" }}>
-        <div className="site-layout-content">
-          <h1>Welcome to the market place</h1>
-          <div className="searchButton">
-            <Search
-              placeholder="Sessun Navy Wool Coat"
-              enterButton="Search"
-              size="large"
-              onSearch={handleItemSearch}
-            />
+    <Router>
+      <Layout className="layout">
+        <Navbar />
+        <Content style={{ padding: "0 50px" }}>
+          <div className="site-layout-content">
+            <Switch>
+              <Route exact path="/" component={MainPage}></Route>
+              <Route path="/sell" component={SellItemForm}></Route>
+            </Switch>
           </div>
-          <h2>{text}</h2>
-        </div>
-      </Content>
-      <Footer style={{ textAlign: "center" }}>
-        ©2019 Created by Haylee Luu / Daphne Hegedus/ Jessica Liu with ♥
-      </Footer>
-    </Layout>
+        </Content>
+        <Footer style={{ textAlign: "center" }}>
+          ©2019 Created by Haylee Luu / Daphne Hegedus/ Jessica Liu with ♥
+        </Footer>
+      </Layout>
+    </Router>
   );
 }
 
