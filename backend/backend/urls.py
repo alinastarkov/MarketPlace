@@ -25,7 +25,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', obtain_jwt_token),
-    url(r'^api/items/$', views.item_list),
+    path('api/items/', views.item_list),
     path('current_user/', views.current_user),
     path('signup/', views.UserList.as_view())
 ]
