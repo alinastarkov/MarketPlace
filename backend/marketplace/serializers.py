@@ -2,9 +2,8 @@
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth.models import User
-
+from .models import Item
 class UserSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
         fields = ('id', 'username', 'last_name', 'email')
@@ -36,3 +35,9 @@ class UserSerializerWithToken(serializers.ModelSerializer):
         model = User
         fields = ('token', 'username', 'password', 'first_name',
         'last_name')
+
+class ItemSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField()
+    class Meta:
+        model = Item
+        fields = ['name', 'description', 'category', 'size', 'brand','price', 'image']

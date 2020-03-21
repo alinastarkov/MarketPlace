@@ -21,12 +21,15 @@ from marketplace import views
 from django.conf.urls import url
 from rest_framework_jwt.views import obtain_jwt_token
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', obtain_jwt_token),
     path('api/items/', views.item_list),
     path('current_user/', views.current_user),
-    path('signup/', views.UserList.as_view())
-]
+    path('signup/', views.UserList.as_view()),
+    path('sell-item/', views.ItemView.as_view())
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
