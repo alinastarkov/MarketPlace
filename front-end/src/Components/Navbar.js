@@ -14,7 +14,6 @@ export function Navbar() {
   );
   const [signInError, setSignInError] = useState(false);
   const [signUpError, setSignUpError] = useState(false);
-
   const handleSigninClick = () => {
     setSigninPopup(true);
   };
@@ -31,6 +30,7 @@ export function Navbar() {
     UserManagement.login(values).then(reponse => {
       if (!reponse.error) {
         localStorage.setItem("token", reponse.token);
+        localStorage.setItem("username", reponse.user.username);
         setSignin(true);
         setSignInError(false);
         setSigninPopup(false);
@@ -48,6 +48,7 @@ export function Navbar() {
     UserManagement.signup(values).then(reponse => {
       if (!reponse.error) {
         localStorage.setItem("token", reponse.token);
+        localStorage.setItem("username", reponse.user.username);
         setSignin(true);
         setSignUpError(false);
         setSignupPopup(false);
@@ -58,8 +59,9 @@ export function Navbar() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
     setSignin(false);
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
   };
 
   const generateSignInNav = (
@@ -69,12 +71,10 @@ export function Navbar() {
       mode="horizontal"
       defaultSelectedKeys={["2"]}
     >
-      <Menu.Item key="1" onClick={handleLogout}>
+      <Menu.Item key="1">
         <Link to="/sell">Sell your clothes </Link>
       </Menu.Item>
-      <Menu.Item key="2" onClick={handleLogout}>
-        My profile
-      </Menu.Item>
+      <Menu.Item key="2">My profile</Menu.Item>
       <Menu.Item key="3" onClick={handleLogout}>
         Logout
       </Menu.Item>
