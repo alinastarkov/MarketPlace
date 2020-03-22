@@ -31,6 +31,6 @@ urlpatterns = [
     path('current_user/', views.current_user),
     path('signup/', views.UserList.as_view()),
     path('sell-item/', views.ItemView.as_view()),
-    path('user/all/item/', views.ItemView.as_view())
+    path('user/item/', views.ItemView.as_view())
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

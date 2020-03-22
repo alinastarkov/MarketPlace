@@ -34,6 +34,12 @@ class UserList(APIView):
 class ItemView(APIView):
     #to do: change to authentication token can access only
     permission_classes = (permissions.AllowAny,)
+    def delete(self, request, format=None):
+        item_name=request.data.get("item_name")
+        name=request.query_params.get("username")
+        Item.objects.get(name=item_name).delete()
+        return HttpResponse("deleted!")
+
     def get(self, request, format=None):
         name=request.query_params.get("username")
         item = Item.objects.all().filter(user__username=name)
