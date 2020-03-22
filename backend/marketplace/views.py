@@ -9,6 +9,7 @@ from .serializers import UserSerializer, UserSerializerWithToken, ItemSerializer
 from .models import Item
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 
 @api_view(['GET', 'POST'])
 @permission_classes((permissions.AllowAny, ))
@@ -36,7 +37,6 @@ class ItemView(APIView):
     permission_classes = (permissions.AllowAny,)
     def delete(self, request, format=None):
         item_name=request.data.get("item_name")
-        name=request.query_params.get("username")
         Item.objects.get(name=item_name).delete()
         return HttpResponse("deleted!")
 
@@ -48,7 +48,13 @@ class ItemView(APIView):
 
     def post(self, request, format=None):
         parser_classes = (MultiPartParser, FormParser)
-        serializer = ItemSerializer(data=request.data)
+        item_name = request.data.get('name')
+        try:
+            itemModel = Item.objects.get(name=item_name)
+            serializer = ItemSerializer(itemModel, data=request.data)
+        except ObjectDoesNotExist:
+            serializer = ItemSerializer(data=request.data)
+
         if serializer.is_valid():
             name = request.data.get("username")
             print(name)
