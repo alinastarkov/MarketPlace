@@ -35,9 +35,23 @@ export function postItem(data) {
 }
 
 export function getUserItems(username) {
-  const url = `${API_URL}/user/all/item/`;
+  const url = `${API_URL}/user/item/`;
   const param = { params: { username: username } };
   return axios.get(url, param).then(
+    response => {
+      return response.data;
+    },
+    error => {
+      console.log(error);
+      return { error: true };
+    }
+  );
+}
+
+export function deleteUserItem(username, itemName) {
+  const url = `${API_URL}/user/item/`;
+  const param = { data: { username: username, item_name: itemName } };
+  return axios.delete(url, param).then(
     response => {
       return response.data;
     },
