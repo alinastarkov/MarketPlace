@@ -12,20 +12,14 @@ function SellItemForm() {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 }
   };
-  // const handleUpload = ({ fileList }) => {
-  //   console.log("fileList", fileList);
-  //   setFile({ fileList });
-  // };
-  // const normFile = e => {
-  //   console.log("Upload event:", e);
-  //   if (Array.isArray(e)) {
-  //     return e;
-  //   }
-  //   return e && e.fileList;
-  // };
-
-  const handleImageChange = e => {
-    setFile(e.target.files[0]);
+  const handleUpload = ({ fileList }) => {
+    setFile({ fileList });
+  };
+  const normFile = e => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.fileList;
   };
 
   const onFinish = v => {
@@ -34,7 +28,7 @@ function SellItemForm() {
       .then(values => {
         form.resetFields();
         values.username = localStorage.getItem("username");
-        values.image = file;
+        values.image = file.fileList[0].originFileObj;
         console.log(values);
         postItem(values);
       })
@@ -67,14 +61,23 @@ function SellItemForm() {
       <Form.Item name="price" label="Price" rules={[{ required: true }]}>
         <Input />
       </Form.Item>
-      <Form.Item>
-        <input
-          type="file"
-          id="image"
-          accept="image/png, image/jpeg"
-          onChange={handleImageChange}
-          required
-        />
+      <Form.Item
+        name="image"
+        label="Upload Image"
+        valuePropName="fileList"
+        extra="Please upload images of your item"
+        getValueFromEvent={normFile}
+      >
+        <Upload
+          name="logo"
+          listType="picture"
+          onChange={handleUpload}
+          beforeUpload={() => false}
+        >
+          <Button>
+            <UploadOutlined /> Click to upload
+          </Button>
+        </Upload>
       </Form.Item>
       <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
         <Button type="primary" htmlType="submit">
@@ -94,24 +97,3 @@ function SellItemForm() {
 }
 
 export default SellItemForm;
-
-{
-  /* <Form.Item
-        name="image"
-        label="Upload Image"
-        valuePropName="fileList"
-        extra="Please upload images of your item"
-        getValueFromEvent={normFile}
-      >
-        <Upload
-          name="logo"
-          listType="picture"
-          onChange={handleUpload}
-          beforeUpload={() => false}
-        >
-          <Button>
-            <UploadOutlined /> Click to upload
-          </Button>
-        </Upload>
-      </Form.Item> */
-}

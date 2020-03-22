@@ -17,7 +17,6 @@ export function Navbar() {
   const handleSigninClick = () => {
     setSigninPopup(true);
   };
-
   const handleSignupClick = () => {
     setSignupPopup(true);
   };
@@ -69,16 +68,21 @@ export function Navbar() {
       className="menu-item-group"
       theme="dark"
       mode="horizontal"
-      defaultSelectedKeys={["2"]}
+      defaultSelectedKeys={["1"]}
     >
       <Menu.Item key="1">
+        <Link to="/">Home </Link>
+      </Menu.Item>
+      <Menu.Item key="2">
         <Link to="/sell">Sell your clothes </Link>
       </Menu.Item>
-      <Menu.Item key="2">My profile</Menu.Item>
-      <Menu.Item key="3" onClick={handleLogout}>
+      <Menu.Item key="3">
+        <Link to="/profile">My profile</Link>
+      </Menu.Item>
+      <Menu.Item key="4" onClick={handleLogout}>
         Logout
       </Menu.Item>
-      <Menu.Item key="4">Your basket</Menu.Item>
+      <Menu.Item key="5">Your basket</Menu.Item>
     </Menu>
   );
 

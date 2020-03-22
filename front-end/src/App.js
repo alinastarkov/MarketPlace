@@ -4,6 +4,7 @@ import { Layout } from "antd";
 import { Navbar } from "../src/Components/Navbar";
 import MainPage from "../src/Components/MainPage";
 import SellItemForm from "../src/Components/Forms/SellItemForm";
+import ProfilePage from "../src/Components/ProfilePage";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 const { Content, Footer } = Layout;
@@ -18,6 +19,7 @@ function App() {
             <Switch>
               <Route exact path="/" component={MainPage}></Route>
               <Route path="/sell" component={SellItemForm}></Route>
+              <Route path="/profile" component={ProfilePage}></Route>
             </Switch>
           </div>
         </Content>

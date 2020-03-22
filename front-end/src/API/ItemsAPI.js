@@ -33,3 +33,17 @@ export function postItem(data) {
     }
   );
 }
+
+export function getUserItems(username) {
+  const url = `${API_URL}/user/all/item/`;
+  const param = { params: { username: username } };
+  return axios.get(url, param).then(
+    response => {
+      return response.data;
+    },
+    error => {
+      console.log(error);
+      return { error: true };
+    }
+  );
+}
