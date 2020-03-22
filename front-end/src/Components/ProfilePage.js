@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { getUserItems, deleteUserItem } from "../API/ItemsAPI";
 
 import { Card, Button } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
+import { Context } from "../GlobalStateManagement/Store";
 
 export default function ProfilePage() {
   const username = localStorage.getItem("username")
@@ -11,6 +13,7 @@ export default function ProfilePage() {
   const [userItem, setUserItem] = useState([]);
   const [noItem, setNoItem] = useState(true);
   const [userID] = useState(0);
+  const [state, dispatch] = useContext(Context);
 
   const gridStyle = {
     width: "25%",
@@ -27,16 +30,13 @@ export default function ProfilePage() {
     });
   };
 
-  const handleEditItem = itemIndex => event => {
-    console.log(itemIndex);
-  };
-
   function fetchUserItem() {
     getUserItems(username).then(reponse => {
       if (!reponse.error) {
         console.log(reponse);
         setUserItem(reponse);
         setNoItem(false);
+        dispatch({ type: "SET_ITEMS", payload: reponse });
       } else {
         console.log("You have no item");
       }
@@ -62,18 +62,16 @@ export default function ProfilePage() {
                 />
               }
             >
-              <Button
-                onClick={handleEditItem(i)}
-                type="primary"
-                shape="circle"
-                icon={<EditOutlined />}
-              />
+              <Button type="link" shape="circle" icon={<EditOutlined />}>
+                <Link to={`/edit/${i}`}>Edit</Link>
+              </Button>
               <Button
                 onClick={handleDeleteItem(i)}
                 type="primary"
                 shape="circle"
                 icon={<DeleteOutlined />}
               />
+              <p>Name : {item.name}</p>
               <p>Description : {item.description}</p>
               <p>Price : {item.price}</p>
               <p>Brand : {item.brand}</p>

@@ -1,12 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "../../App.css";
 import { Form, Input, Button, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { postItem } from "../../API/ItemsAPI";
+import { Context } from "../../GlobalStateManagement/Store";
+
 // TODO: AFTER LOG OUT SELL ITEM FORM IS NOT RERENDER => SYNCRONIZE IT
-function SellItemForm() {
+function SellItemForm(props) {
+  // FOR EDIT FORM
+  var currentLocation = window.location.pathname;
+  const index = currentLocation.slice(currentLocation.lastIndexOf("/") + 1);
+  const isEdit = /^\d+$/.test(index);
+  const [state, dispatch] = useContext(Context);
+  const modifiedItem = isEdit ? state.items[index] : undefined;
   const [form] = Form.useForm();
   const [file, setFile] = useState(null);
+
+  const fields = {
+    name: modifiedItem ? modifiedItem.name : "",
+    description: modifiedItem ? modifiedItem.description : "",
+    size: modifiedItem ? modifiedItem.size : "",
+    brand: modifiedItem ? modifiedItem.brand : "",
+    category: modifiedItem ? modifiedItem.category : "",
+    price: modifiedItem ? modifiedItem.price : ""
+  };
 
   const layout = {
     labelCol: { span: 8 },
@@ -38,7 +55,13 @@ function SellItemForm() {
   };
 
   const formSell = (
-    <Form {...layout} form={form} onFinish={onFinish} name="nest-messages">
+    <Form
+      {...layout}
+      form={form}
+      onFinish={onFinish}
+      name="nest-messages"
+      initialValues={fields}
+    >
       <Form.Item name="name" label="Item Name" rules={[{ required: true }]}>
         <Input />
       </Form.Item>
