@@ -5,6 +5,7 @@ import { SignUpPopup } from "../Components/Popup/SignUpPopup";
 import * as UserManagement from "../API/UserManagementAPI";
 import { Link } from "react-router-dom";
 const { Header } = Layout;
+const { SubMenu } = Menu;
 
 export function Navbar() {
   const [signInVisible, setSigninPopup] = useState(false);
@@ -76,9 +77,15 @@ export function Navbar() {
       <Menu.Item key="2">
         <Link to="/sell">Sell your clothes </Link>
       </Menu.Item>
-      <Menu.Item key="3">
-        <Link to="/profile">My profile</Link>
-      </Menu.Item>
+      <SubMenu
+        title={<span className="submenu-title-wrapper">My profile</span>}
+      >
+        <Menu.Item key="setting:1">
+          <Link to="/user-item"> Items you're selling </Link>
+        </Menu.Item>
+        <Menu.Item key="setting:2">Your Order History</Menu.Item>
+        <Menu.Item key="setting:3">Your Profile</Menu.Item>
+      </SubMenu>
       <Menu.Item key="4" onClick={handleLogout}>
         Logout
       </Menu.Item>

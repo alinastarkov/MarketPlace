@@ -1,9 +1,9 @@
-const Reducer = (state, action) => {
+const Reducer = (state = [], action) => {
   switch (action.type) {
-    case "SET_ITEMS":
+    case "SET_USER_ITEMS":
       return {
         ...state,
-        items: action.payload
+        items: action.userItems
       };
     default:
       return state;

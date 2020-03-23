@@ -1,19 +1,20 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { getUserItems, deleteUserItem } from "../API/ItemsAPI";
 
 import { Card, Button } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import { Context } from "../GlobalStateManagement/Store";
 
-export default function ProfilePage() {
+import { setUserItems } from "../GlobalStateManagement/Actions/index";
+import { connect } from "react-redux";
+
+function ProfilePage(props) {
   const username = localStorage.getItem("username")
     ? localStorage.getItem("username")
     : null;
   const [userItem, setUserItem] = useState([]);
   const [noItem, setNoItem] = useState(true);
   const [userID] = useState(0);
-  const [state, dispatch] = useContext(Context);
 
   const gridStyle = {
     width: "25%",
@@ -36,17 +37,19 @@ export default function ProfilePage() {
       if (!reponse.error) {
         console.log("response fetch Item", reponse);
         setUserItem(reponse);
-        dispatch({ type: "SET_ITEMS", payload: reponse });
       } else {
         console.log("You have no item");
       }
     });
   }
 
+  // after fetch user item we check if it's empty or not
   useEffect(() => {
+    props.setGlobalUserItem(userItem);
     userItem.length === 0 ? setNoItem(true) : setNoItem(false);
   }, [userItem]);
 
+  // without [userID] userEffect will be in a infinite loop
   useEffect(() => {
     fetchUserItem();
   }, [userID]);
@@ -66,8 +69,10 @@ export default function ProfilePage() {
                 />
               }
             >
-              <Button type="link" shape="circle" icon={<EditOutlined />}>
-                <Link to={`/edit/${i}`}>Edit</Link>
+              <Button type="primary" shape="circle">
+                <Link to={`/edit/${i}`}>
+                  <EditOutlined />
+                </Link>
               </Button>
               <Button
                 onClick={handleDeleteItem(i)}
@@ -105,3 +110,12 @@ export default function ProfilePage() {
     content
   );
 }
+
+function mapDispatchToProps(dispatch) {
+  return {
+    setGlobalUserItem: userItem => dispatch(setUserItems(userItem))
+  };
+}
+const ConnectedProfilePage = connect(null, mapDispatchToProps)(ProfilePage);
+
+export default ConnectedProfilePage;

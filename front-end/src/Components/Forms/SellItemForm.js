@@ -1,18 +1,19 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import "../../App.css";
 import { Form, Input, Button, Upload, InputNumber } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { postItem } from "../../API/ItemsAPI";
-import { Context } from "../../GlobalStateManagement/Store";
+import { connect } from "react-redux";
 
 // TODO: AFTER LOG OUT SELL ITEM FORM IS NOT RERENDER => SYNCRONIZE IT
+
 function SellItemForm(props) {
   // FOR EDIT FORM
   var currentLocation = window.location.pathname;
   const index = currentLocation.slice(currentLocation.lastIndexOf("/") + 1);
   const isEdit = /^\d+$/.test(index);
-  const [state, dispatch] = useContext(Context);
-  const modifiedItem = isEdit ? state.items[index] : undefined;
+  console.log(props.userItems);
+  const modifiedItem = isEdit ? props.userItems[index] : undefined;
   const [form] = Form.useForm();
   const [file, setFile] = useState(null);
 
@@ -53,7 +54,7 @@ function SellItemForm(props) {
           values.id = modifiedItem.id;
         }
         console.log("send request form: ", values);
-        postItem(values);
+        postItem(values).then(() => props.history.push("/user-item"));
       })
       .catch(info => {
         console.log("Validate Failed:", info);
@@ -131,4 +132,8 @@ function SellItemForm(props) {
   );
 }
 
-export default SellItemForm;
+const mapStateToProps = state => {
+  return { userItems: state.ItemReducer.items };
+};
+const ConnectedForm = connect(mapStateToProps)(SellItemForm);
+export default ConnectedForm;

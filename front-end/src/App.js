@@ -4,14 +4,19 @@ import { Layout } from "antd";
 import { Navbar } from "../src/Components/Navbar";
 import MainPage from "../src/Components/MainPage";
 import SellItemForm from "../src/Components/Forms/SellItemForm";
-import ProfilePage from "../src/Components/ProfilePage";
+import UserItemPage from "../src/Components/ProfilePage";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Store from "../src/GlobalStateManagement/Store";
+
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import rootReducer from "../src/GlobalStateManagement/Reducer/Reducer";
+
 const { Content, Footer } = Layout;
+const store = createStore(rootReducer);
 
 function App() {
   return (
-    <Store>
+    <Provider store={store}>
       <Router>
         <Layout className="layout">
           <Navbar />
@@ -21,7 +26,7 @@ function App() {
                 <Route exact path="/" component={MainPage}></Route>
                 <Route path="/sell" component={SellItemForm}></Route>
                 <Route path="/edit/*" component={SellItemForm}></Route>
-                <Route path="/profile" component={ProfilePage}></Route>
+                <Route path="/user-item" component={UserItemPage}></Route>
               </Switch>
             </div>
           </Content>
@@ -30,7 +35,7 @@ function App() {
           </Footer>
         </Layout>
       </Router>
-    </Store>
+    </Provider>
   );
 }
 

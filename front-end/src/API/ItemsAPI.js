@@ -1,9 +1,14 @@
 import axios from "axios";
 const API_URL = "http://localhost:8000";
 
-export function getItems() {
-  const url = `${API_URL}/api/items/`;
-  return axios.get(url).then(response => response.data);
+export function getItems(username) {
+  const url = `${API_URL}/items/`;
+  if (username) {
+    const param = { params: { username: username } };
+    return axios.get(url, param).then(response => response.data);
+  } else {
+    return axios.get(url).then(response => response.data);
+  }
 }
 
 export function postItem(data) {
