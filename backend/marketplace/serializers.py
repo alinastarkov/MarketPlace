@@ -3,6 +3,8 @@ from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth.models import User
 from .models import Item
+import uuid 
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -40,4 +42,4 @@ class ItemSerializer(serializers.ModelSerializer):
     image = serializers.ImageField()
     class Meta:
         model = Item
-        fields = ['name', 'description', 'category', 'size', 'brand','price', 'image']
+        fields = ['name', 'description', 'category', 'size', 'brand','price', 'image', 'inventory', 'id']

@@ -10,6 +10,7 @@ from .models import Item
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+import uuid 
 
 @api_view(['GET', 'POST'])
 @permission_classes((permissions.AllowAny, ))
@@ -33,7 +34,7 @@ class UserList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ItemView(APIView):
-    #to do: change to authentication token can access only
+    #todo: change to authentication token can access only
     permission_classes = (permissions.AllowAny,)
     def delete(self, request, format=None):
         item_name=request.data.get("item_name")
@@ -48,11 +49,12 @@ class ItemView(APIView):
 
     def post(self, request, format=None):
         parser_classes = (MultiPartParser, FormParser)
-        item_name = request.data.get('name')
+        item_id = request.data.get('id')
         try:
-            itemModel = Item.objects.get(name=item_name)
+            itemModel = Item.objects.get(id=item_id)
             serializer = ItemSerializer(itemModel, data=request.data)
         except ObjectDoesNotExist:
+            request.data.update({"id": uuid.uuid4()})
             serializer = ItemSerializer(data=request.data)
 
         if serializer.is_valid():
