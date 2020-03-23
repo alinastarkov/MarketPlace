@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import "../../App.css";
-import { Form, Input, Button, Upload } from "antd";
+import { Form, Input, Button, Upload, InputNumber } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { postItem } from "../../API/ItemsAPI";
 import { Context } from "../../GlobalStateManagement/Store";
@@ -22,16 +22,19 @@ function SellItemForm(props) {
     size: modifiedItem ? modifiedItem.size : "",
     brand: modifiedItem ? modifiedItem.brand : "",
     category: modifiedItem ? modifiedItem.category : "",
-    price: modifiedItem ? modifiedItem.price : ""
+    price: modifiedItem ? modifiedItem.price : "",
+    inventory: modifiedItem ? modifiedItem.inventory : ""
   };
 
   const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 }
   };
+
   const handleUpload = ({ fileList }) => {
     setFile({ fileList });
   };
+
   const normFile = e => {
     if (Array.isArray(e)) {
       return e;
@@ -46,7 +49,10 @@ function SellItemForm(props) {
         form.resetFields();
         values.username = localStorage.getItem("username");
         values.image = file.fileList[0].originFileObj;
-        console.log(values);
+        if (modifiedItem) {
+          values.id = modifiedItem.id;
+        }
+        console.log("send request form: ", values);
         postItem(values);
       })
       .catch(info => {
@@ -83,6 +89,12 @@ function SellItemForm(props) {
       </Form.Item>
       <Form.Item name="price" label="Price" rules={[{ required: true }]}>
         <Input />
+      </Form.Item>
+      <Form.Item label="Number of Item">
+        <Form.Item name="inventory" noStyle>
+          <InputNumber min={1} />
+        </Form.Item>
+        <span className="ant-form-text"> Item</span>
       </Form.Item>
       <Form.Item
         name="image"

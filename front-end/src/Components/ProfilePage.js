@@ -17,6 +17,7 @@ export default function ProfilePage() {
 
   const gridStyle = {
     width: "25%",
+    height: "25%",
     textAlign: "center"
   };
 
@@ -33,15 +34,18 @@ export default function ProfilePage() {
   function fetchUserItem() {
     getUserItems(username).then(reponse => {
       if (!reponse.error) {
-        console.log(reponse);
+        console.log("response fetch Item", reponse);
         setUserItem(reponse);
-        setNoItem(false);
         dispatch({ type: "SET_ITEMS", payload: reponse });
       } else {
         console.log("You have no item");
       }
     });
   }
+
+  useEffect(() => {
+    userItem.length === 0 ? setNoItem(true) : setNoItem(false);
+  }, [userItem]);
 
   useEffect(() => {
     fetchUserItem();
@@ -54,11 +58,11 @@ export default function ProfilePage() {
           <Card.Grid style={gridStyle}>
             {" "}
             <Card
-              style={{ width: 300 }}
               cover={
                 <img
                   alt="example"
                   src={require(`../../../backend/marketplace${item.image}`)}
+                  style={{ height: "300px" }}
                 />
               }
             >
@@ -77,6 +81,7 @@ export default function ProfilePage() {
               <p>Brand : {item.brand}</p>
               <p>Category : {item.category}</p>
               <p>Size : {item.size}</p>
+              <p>Inventory : {item.inventory}</p>
             </Card>
           </Card.Grid>
         </div>

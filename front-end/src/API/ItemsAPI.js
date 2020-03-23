@@ -22,6 +22,8 @@ export function postItem(data) {
   form_data.append("price", data.price);
   form_data.append("brand", data.brand);
   form_data.append("username", data.username);
+  form_data.append("inventory", data.inventory);
+  form_data.append("id", data.id);
 
   return axios.post(url, form_data, config).then(
     response => {
