@@ -3,6 +3,11 @@ export const setUserItems = userItems => ({
   userItems
 });
 
+export const setAllItems = allItems => ({
+  type: "SET_ALL_ITEMS",
+  allItems
+});
+
 export const addItemToBasket = newItem => ({
   type: "APPEND_ITEM",
   newItem
@@ -11,4 +16,9 @@ export const addItemToBasket = newItem => ({
 export const deleteItemToBasket = id => ({
   type: "DELETE_ITEM",
   id
+});
+
+export const setBasket = newItems => ({
+  type: "SET_BASKET",
+  newItems
 });

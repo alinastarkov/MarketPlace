@@ -89,7 +89,8 @@ function SellItemForm(props) {
         <Input />
       </Form.Item>
       <Form.Item name="price" label="Price" rules={[{ required: true }]}>
-        <Input />
+        <InputNumber min={1} />
+        <span className="ant-form-text"> $</span>
       </Form.Item>
       <Form.Item label="Number of Item">
         <Form.Item name="inventory" noStyle>
@@ -133,7 +134,7 @@ function SellItemForm(props) {
 }
 
 const mapStateToProps = state => {
-  return { userItems: state.ItemReducer.items };
+  return { userItems: state.ItemReducer.items.userItems };
 };
 const ConnectedForm = connect(mapStateToProps)(SellItemForm);
 export default ConnectedForm;

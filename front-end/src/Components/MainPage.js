@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "../App.css";
 import { getItems } from "../API/ItemsAPI";
 import { Input, Card, Button, Modal } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
-import { addItemToBasket } from "../GlobalStateManagement/Actions/index";
+import {
+  addItemToBasket,
+  setAllItems
+} from "../GlobalStateManagement/Actions/index";
 import { connect } from "react-redux";
 const { Search } = Input;
 
 function MainPage(props) {
-  const [allItems, setItemData] = useState([]);
   const username = localStorage.getItem("username");
+  const [allItems, setItemData] = useState([]);
   const [noItem, setNoItem] = useState(true);
   const [userID] = useState(0);
   const [confirmVisible, setModalVisble] = useState(false);
@@ -22,16 +25,19 @@ function MainPage(props) {
 
   const handleItemSearch = () => {};
 
-  const fetchAllItems = () => {
-    getItems(username).then(response => setItemData(response));
+  const fetchallItems = () => {
+    getItems(username).then(response => {
+      props.setItemData(response);
+      setItemData(response);
+    });
   };
 
   useEffect(() => {
-    allItems.length === 0 ? setNoItem(true) : setNoItem(false);
-  }, [allItems]);
+    props.allItems.length === 0 ? setNoItem(true) : setNoItem(false);
+  }, [props.allItems]);
 
   const addItemToBasket = itemIndex => event => {
-    props.addItemToBasket(allItems[itemIndex]);
+    props.addItemToBasket(props.allItems[itemIndex]);
     setModalVisble(true);
     decrementItemInventory(itemIndex);
   };
@@ -47,7 +53,7 @@ function MainPage(props) {
   };
 
   useEffect(() => {
-    fetchAllItems();
+    fetchallItems();
   }, [userID]);
 
   const itemCard = (
@@ -113,12 +119,16 @@ function MainPage(props) {
 }
 
 const mapStateToProps = state => {
-  return { basket: state.BasketReducer.basket };
+  return {
+    basket: state.BasketReducer.basket,
+    allItems: state.ItemReducer.items.allItems
+  };
 };
 
 function mapDispatchToProps(dispatch) {
   return {
-    addItemToBasket: item => dispatch(addItemToBasket(item))
+    addItemToBasket: item => dispatch(addItemToBasket(item)),
+    setItemData: allItems => dispatch(setAllItems(allItems))
   };
 }
 const ConnectedMainPage = connect(

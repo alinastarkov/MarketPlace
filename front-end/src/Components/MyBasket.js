@@ -1,18 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { Card, Button } from "antd";
+import { Card, Button, Modal } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
-import { deleteItemToBasket } from "../GlobalStateManagement/Actions/index";
+import {
+  deleteItemToBasket,
+  setBasket
+} from "../GlobalStateManagement/Actions/index";
 import { Link } from "react-router-dom";
 
 function MyBasket(props) {
+  const [visible, setModalVisble] = useState(false);
   const handleDeleteItem = item_id => event => {
     props.removeItemFromBasket(item_id);
   };
   const username = localStorage.getItem("username")
     ? localStorage.getItem("username")
     : null;
+
+  const incrementQuantity = index => event => {
+    let newArray = props.basket.slice();
+    let basketItem = newArray[index];
+    let item = props.allItems.filter(item => item.id === basketItem.id);
+    if (item[0].inventory === basketItem.quantity) {
+      setModalVisble(true);
+    } else {
+      basketItem.quantity++;
+      props.updateBasket(newArray);
+    }
+  };
+
+  const decrementQuantity = index => event => {
+    let newArray = props.basket.slice();
+    let item = newArray[index];
+    item.quantity--;
+    if (item.quantity <= 0) {
+      props.removeItemFromBasket(item.id);
+    } else {
+      props.updateBasket(newArray);
+    }
+  };
+
   const card = (
     <div>
       {props.basket.map((item, i) => (
@@ -38,6 +66,23 @@ function MyBasket(props) {
             <p>Price : {item.price}</p>
             <p>Brand : {item.brand}</p>
             <p>Size : {item.size}</p>
+            {item.quantity ? (
+              <span>
+                <Button onClick={incrementQuantity(i)}>+</Button>
+                <p>Quantity: {item.quantity}</p>
+                <Button onClick={decrementQuantity(i)}>-</Button>
+              </span>
+            ) : (
+              <p></p>
+            )}
+            <Modal
+              title="Warning"
+              visible={visible}
+              onOk={() => setModalVisble(false)}
+              cancelButtonProps={{ style: { display: "none" } }}
+            >
+              <p> This item is out of stock </p>
+            </Modal>
           </Card>
         </div>
       ))}
@@ -68,12 +113,16 @@ function MyBasket(props) {
 }
 
 const mapStateToProps = state => {
-  return { basket: state.BasketReducer.basket };
+  return {
+    basket: state.BasketReducer.basket,
+    allItems: state.ItemReducer.items.allItems
+  };
 };
 
 function mapDispatchToProps(dispatch) {
   return {
-    removeItemFromBasket: item_id => dispatch(deleteItemToBasket(item_id))
+    removeItemFromBasket: item_id => dispatch(deleteItemToBasket(item_id)),
+    updateBasket: newItems => dispatch(setBasket(newItems))
   };
 }
 
