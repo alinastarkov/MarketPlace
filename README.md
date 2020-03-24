@@ -5,7 +5,7 @@
 1. Install venv: python3 -m venv ./env
 2. Activate virtual environment: source env/bin/activate
 3. Install requirements: pip install -r requirements.txt
-4. python manage.py makemigrations && python manage.py migrate
+4. cd backend && python manage.py makemigrations && python manage.py migrate
 5. cd backend && python manage.py runserver
 6. Install yarn/ npm (if needed)
 7. Install front-end dependencies: cd front-end && npm install 
