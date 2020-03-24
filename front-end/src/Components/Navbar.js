@@ -48,7 +48,7 @@ export function Navbar() {
     UserManagement.signup(values).then(reponse => {
       if (!reponse.error) {
         localStorage.setItem("token", reponse.token);
-        localStorage.setItem("username", reponse.user.username);
+        localStorage.setItem("username", reponse.username);
         setSignin(true);
         setSignUpError(false);
         setSignupPopup(false);
