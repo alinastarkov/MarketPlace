@@ -89,7 +89,10 @@ export function Navbar() {
       <Menu.Item key="4" onClick={handleLogout}>
         Logout
       </Menu.Item>
-      <Menu.Item key="5">Your basket</Menu.Item>
+      <Menu.Item key="5">
+        {" "}
+        <Link to="/basket"> My Basket </Link>
+      </Menu.Item>
     </Menu>
   );
 

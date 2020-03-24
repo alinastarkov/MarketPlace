@@ -4,7 +4,9 @@ import { Layout } from "antd";
 import { Navbar } from "../src/Components/Navbar";
 import MainPage from "../src/Components/MainPage";
 import SellItemForm from "../src/Components/Forms/SellItemForm";
-import UserItemPage from "../src/Components/ProfilePage";
+import UserItemPage from "../src/Components/MyItemSell";
+import MyBasketPage from "../src/Components/MyBasket";
+import CheckoutForm from "../src/Components/Forms/CheckoutForm";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import { createStore } from "redux";
@@ -27,6 +29,8 @@ function App() {
                 <Route path="/sell" component={SellItemForm}></Route>
                 <Route path="/edit/*" component={SellItemForm}></Route>
                 <Route path="/user-item" component={UserItemPage}></Route>
+                <Route path="/basket" component={MyBasketPage}></Route>
+                <Route path="/checkout" component={CheckoutForm}></Route>
               </Switch>
             </div>
           </Content>

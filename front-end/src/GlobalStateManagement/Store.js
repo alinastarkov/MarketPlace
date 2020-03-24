@@ -1,16 +1,67 @@
-import React, { createContext, useReducer } from "react";
-import ItemReducer from "./Reducer/ItemReducer";
+import { createStore } from "redux";
 
-const initialState = {
-  items: []
-};
+import rootReducer from "./Reducer/Reducer";
 
-const Store = ({ children }) => {
-  const [state, dispatch] = useReducer(ItemReducer, initialState);
-  return (
-    <Context.Provider value={[state, dispatch]}>{children}</Context.Provider>
-  );
-};
+const LOCAL_STORAGE_NAME = "localData";
 
-export const Context = createContext(initialState);
-export default Store;
+class PersistedStore {
+  static DefaultStore = null;
+  static getDefaultStore() {
+    if (PersistedStore.DefaultStore === null) {
+      PersistedStore.DefaultStore = new PersistedStore();
+    }
+
+    return PersistedStore.DefaultStore;
+  }
+
+  // Redux store
+  _store = null;
+
+  // When class instance is used, initialize the store
+  constructor() {
+    this.initStore();
+  }
+
+  // Initialization of Redux Store
+  initStore() {
+    this._store = createStore(rootReducer, PersistedStore.loadState());
+    this._store.subscribe(() => {
+      PersistedStore.saveState(this._store.getState());
+    });
+  }
+
+  // Getter to access the Redux store
+  get store() {
+    return this._store;
+  }
+
+  // Loading persisted state from localStorage, no need to access
+  // this method from the outside
+  static loadState() {
+    try {
+      let serializedState = localStorage.getItem(LOCAL_STORAGE_NAME);
+
+      if (serializedState === null) {
+        return PersistedStore.initialState();
+      }
+
+      return JSON.parse(serializedState);
+    } catch (err) {
+      return PersistedStore.initialState();
+    }
+  }
+
+  static saveState(state) {
+    try {
+      let serializedState = JSON.stringify(state);
+      localStorage.setItem(LOCAL_STORAGE_NAME, serializedState);
+    } catch (err) {}
+  }
+
+  // Return whatever you want your initial state to be
+  static initialState() {
+    return {};
+  }
+}
+
+export default PersistedStore;
