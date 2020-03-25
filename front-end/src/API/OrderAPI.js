@@ -14,3 +14,9 @@ export function postPayment(data) {
     }
   );
 }
+
+export function getUserOrders(username) {
+  const url = `${API_URL}/user/orders/`;
+  const param = { params: { username: username } };
+  return axios.get(url, param).then(response => response.data);
+}

@@ -7,6 +7,7 @@ import SellItemForm from "../src/Components/Forms/SellItemForm";
 import UserItemPage from "../src/Components/MyItemSell";
 import MyBasketPage from "../src/Components/MyBasket";
 import CheckoutForm from "../src/Components/Forms/CheckoutForm";
+import MyOrder from "../src/Components/MyOrders";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import { createStore } from "redux";
@@ -31,6 +32,7 @@ function App() {
                 <Route path="/user-item" component={UserItemPage}></Route>
                 <Route path="/basket" component={MyBasketPage}></Route>
                 <Route path="/checkout" component={CheckoutForm}></Route>
+                <Route path="/user-order" component={MyOrder}></Route>
               </Switch>
             </div>
           </Content>

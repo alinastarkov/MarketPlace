@@ -3,7 +3,7 @@ import "../../App.css";
 import { Form, Input, Button } from "antd";
 import { connect } from "react-redux";
 import TotalOrder from "../TotalOrder";
-import { postPayment } from "../../API/PaymentAPI";
+import { postPayment } from "../../API/OrderAPI";
 
 // TODO: AFTER LOG OUT SELL ITEM FORM IS NOT RERENDER => SYNCRONIZE IT
 

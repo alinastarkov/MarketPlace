@@ -13,7 +13,6 @@ function ProfilePage(props) {
     ? localStorage.getItem("username")
     : null;
   const [userItem, setUserItem] = useState([]);
-  const [noItem, setNoItem] = useState(true);
   const [userID] = useState(0);
 
   const gridStyle = {
@@ -46,7 +45,6 @@ function ProfilePage(props) {
   // after fetch user item we check if it's empty or not
   useEffect(() => {
     props.setGlobalUserItem(userItem);
-    userItem.length === 0 ? setNoItem(true) : setNoItem(false);
   }, [userItem]);
 
   // without [userID] userEffect will be in a infinite loop
@@ -94,13 +92,14 @@ function ProfilePage(props) {
     </Card>
   );
 
-  const content = noItem ? (
-    <div>
-      <h1> You don't have any item</h1>
-    </div>
-  ) : (
-    card
-  );
+  const content =
+    userItem.length === 0 ? (
+      <div>
+        <h1> You don't have any item</h1>
+      </div>
+    ) : (
+      card
+    );
 
   return username == null ? (
     <div>

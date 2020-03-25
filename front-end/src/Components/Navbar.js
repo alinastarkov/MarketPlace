@@ -83,7 +83,9 @@ export function Navbar() {
         <Menu.Item key="setting:1">
           <Link to="/user-item"> Items you're selling </Link>
         </Menu.Item>
-        <Menu.Item key="setting:2">Your Order History</Menu.Item>
+        <Menu.Item key="setting:2">
+          <Link to="/user-order"> Your order history </Link>
+        </Menu.Item>
         <Menu.Item key="setting:3">Your Profile</Menu.Item>
       </SubMenu>
       <Menu.Item key="4" onClick={handleLogout}>
