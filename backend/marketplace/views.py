@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 from rest_framework.parsers import MultiPartParser, FormParser
-from .serializers import UserSerializer, UserSerializerWithToken, ItemSerializer
+from .serializers import UserSerializer, UserSerializerWithToken, ItemSerializer, OrderSerializer
 from .models import Item
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
@@ -67,10 +67,21 @@ class ItemView(APIView):
             serializer = ItemSerializer(data=new_data)
 
         if serializer.is_valid():
-            name = request.data.get("username")
-            userInstance = User.objects.get(username=name)
+            username = request.data.get("username")
+            userInstance = User.objects.get(username=username)
             serializer.save(user = userInstance)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             print('error', serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class Order(APIView):
+    permission_classes = (permissions.AllowAny,)
+    def post(self, request, format=None):
+        serializer = OrderSerializer(data=request.data)
+        if serializer.is_valid():
+            username = request.data.get("username")
+            userInstance = User.objects.get(username=username)
+            serializer.save(user = userInstance)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth.models import User
-from .models import Item
+from .models import Item, OrderedProducts, Order
 import uuid 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -43,3 +43,21 @@ class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = ['name', 'description', 'category', 'size', 'brand','price', 'image', 'inventory', 'id']
+
+class OrderedItemsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderedProducts
+        fields = ['id', 'quantity', 'price']
+class OrderSerializer(serializers.ModelSerializer):
+    ordered_items = OrderedItemsSerializer(many=True)
+    id = uuid.uuid4()
+    class Meta:
+        model = Order
+        fields = ['id', 'full_name','address', 'country', 'state', 'city', 'total_price', 'card_number', 'ordered_items']
+
+    def create(self, validated_data):
+        items_data = validated_data.pop('ordered_items')
+        order = Order.objects.create(**validated_data)
+        for item_data in items_data:
+            OrderedProducts.objects.create(order=order, **item_data)
+        return order
