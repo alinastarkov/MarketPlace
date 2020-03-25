@@ -59,5 +59,7 @@ class OrderSerializer(serializers.ModelSerializer):
         items_data = validated_data.pop('ordered_items')
         order = Order.objects.create(**validated_data)
         for item_data in items_data:
-            OrderedProducts.objects.create(order=order, **item_data)
+            op = OrderedProducts.objects.create(order=order, **item_data)
+            order.ordered_items.add(op)
         return order
+

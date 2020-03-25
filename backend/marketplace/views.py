@@ -5,8 +5,8 @@ from rest_framework.views import APIView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 from rest_framework.parsers import MultiPartParser, FormParser
-from .serializers import UserSerializer, UserSerializerWithToken, ItemSerializer, OrderSerializer
-from .models import Item
+from .serializers import UserSerializer, UserSerializerWithToken, ItemSerializer, OrderSerializer, OrderedItemsSerializer
+from .models import Item, Order
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
@@ -75,13 +75,30 @@ class ItemView(APIView):
             print('error', serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class Order(APIView):
+class OrderView(APIView):
     permission_classes = (permissions.AllowAny,)
     def post(self, request, format=None):
-        serializer = OrderSerializer(data=request.data)
-        if serializer.is_valid():
+        items_data = request.data.copy().pop('ordered_items')
+        serializerOrder = OrderSerializer(data=request.data)
+        if serializerOrder.is_valid():
+            #update the inventory in the items
+            for item_data in items_data:
+                item = Item.objects.get(id=item_data['id'])
+                new_inventory = item.inventory - item_data['quantity']
+                serializerItem = ItemSerializer(item, data={'inventory': new_inventory}, partial=True)
+                if serializerItem.is_valid():
+                    serializerItem.save()
+                else:
+                    return Response(serializerItem.errors, status=status.HTTP_400_BAD_REQUEST)
+             # save new order into the order db
             username = request.data.get("username")
             userInstance = User.objects.get(username=username)
-            serializer.save(user = userInstance)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            serializerOrder.save(user = userInstance)
+            return Response(serializerOrder.data, status=status.HTTP_201_CREATED)
+        return Response(serializerOrder.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def get(self, request, format=None):
+        name=request.query_params.get("username")
+        allOrders = Order.objects.filter(user__username=name)
+        serializer = OrderSerializer(allOrders, many=True)
+        return Response(serializer.data)
