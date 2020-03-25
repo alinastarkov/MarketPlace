@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Card, Button, Modal } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
 import {
   deleteItemToBasket,
-  setBasket
+  setBasket,
+  setTotalPrice
 } from "../GlobalStateManagement/Actions/index";
 import { Link } from "react-router-dom";
+import TotalOrder from "../Components/TotalOrder";
+import { calculateTotal } from "../utils/utilsFunction";
 
 function MyBasket(props) {
   const [visible, setModalVisble] = useState(false);
@@ -29,6 +32,10 @@ function MyBasket(props) {
       props.updateBasket(newArray);
     }
   };
+
+  useEffect(() => {
+    props.updateTotalPrice(calculateTotal(props.basket));
+  }, [props.basket]);
 
   const decrementQuantity = index => event => {
     let newArray = props.basket.slice();
@@ -86,6 +93,7 @@ function MyBasket(props) {
           </Card>
         </div>
       ))}
+      <TotalOrder />
     </div>
   );
 
@@ -94,7 +102,7 @@ function MyBasket(props) {
       <div>
         {card}
         <Button type="primary" size="large">
-          <Link to="/checkout">checkout</Link>
+          <Link to="/checkout">Check out</Link>
         </Button>
       </div>
     ) : (
@@ -122,7 +130,8 @@ const mapStateToProps = state => {
 function mapDispatchToProps(dispatch) {
   return {
     removeItemFromBasket: item_id => dispatch(deleteItemToBasket(item_id)),
-    updateBasket: newItems => dispatch(setBasket(newItems))
+    updateBasket: newItems => dispatch(setBasket(newItems)),
+    updateTotalPrice: newPrice => dispatch(setTotalPrice(newPrice))
   };
 }
 

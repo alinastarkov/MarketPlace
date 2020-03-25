@@ -2,6 +2,8 @@ import React from "react";
 import "../../App.css";
 import { Form, Input, Button } from "antd";
 import { connect } from "react-redux";
+import TotalOrder from "../TotalOrder";
+import { postPayment } from "../../API/PaymentAPI";
 
 // TODO: AFTER LOG OUT SELL ITEM FORM IS NOT RERENDER => SYNCRONIZE IT
 
@@ -20,7 +22,12 @@ function CheckOutForm(props) {
       .validateFields()
       .then(values => {
         form.resetFields();
-        console.log(values);
+        values.ordered_items = props.basket.map(item => {
+          return { id: item.id, quantity: item.quantity, price: item.price };
+        });
+        values.username = localStorage.getItem("username");
+        values.total_price = props.totalPrice;
+        postPayment(values);
       })
       .catch(info => {
         console.log("Validate Failed:", info);
@@ -28,38 +35,45 @@ function CheckOutForm(props) {
   };
 
   const formSell = (
-    <Form {...layout} form={form} onFinish={onFinish} name="nest-messages">
-      <Form.Item name="fullname" label="Full Name" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="email" label="Email" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="address" label="Address" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="city" label="City" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="state" label="State" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="country" label="Country" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item
-        name="cardNumber"
-        label="Credit Card Number"
-        rules={[{ required: true }]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
+    <div>
+      <Form {...layout} form={form} onFinish={onFinish} name="nest-messages">
+        <Form.Item
+          name="full_name"
+          label="Full Name"
+          rules={[{ required: true }]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item name="email" label="Email" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item name="address" label="Address" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item name="city" label="City" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item name="state" label="State" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item name="country" label="Country" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name="card_number"
+          label="Credit Card Number"
+          rules={[{ required: true }]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+      <TotalOrder />
+    </div>
   );
 
   return !localStorage.getItem("token") ? (
@@ -72,7 +86,10 @@ function CheckOutForm(props) {
 }
 
 const mapStateToProps = state => {
-  return { basket: state.BasketReducer.basket };
+  return {
+    basket: state.BasketReducer.basket,
+    totalPrice: state.ItemReducer.items.totalPrice
+  };
 };
 
 const ConnectedForm = connect(mapStateToProps)(CheckOutForm);

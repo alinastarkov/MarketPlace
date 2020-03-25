@@ -54,7 +54,7 @@ function SellItemForm(props) {
           values.id = modifiedItem.id;
         }
         console.log("send request form: ", values);
-        postItem(values).then(() => props.history.push("/user-item"));
+        postItem(values).then(() => props.history.push("/"));
       })
       .catch(info => {
         console.log("Validate Failed:", info);
@@ -88,9 +88,11 @@ function SellItemForm(props) {
       <Form.Item name="brand" label="Brand" rules={[{ required: true }]}>
         <Input />
       </Form.Item>
-      <Form.Item name="price" label="Price" rules={[{ required: true }]}>
-        <InputNumber min={1} />
-        <span className="ant-form-text"> $</span>
+      <Form.Item label="Price">
+        <Form.Item name="price" noStyle>
+          <InputNumber min={1} />
+        </Form.Item>
+        <span className="ant-form-text"> Item</span>
       </Form.Item>
       <Form.Item label="Number of Item">
         <Form.Item name="inventory" noStyle>

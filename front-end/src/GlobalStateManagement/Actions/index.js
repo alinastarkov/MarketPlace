@@ -22,3 +22,8 @@ export const setBasket = newItems => ({
   type: "SET_BASKET",
   newItems
 });
+
+export const setTotalPrice = newPrice => ({
+  type: "SET_TOTAL_PRICE",
+  newPrice
+});
