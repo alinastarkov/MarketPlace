@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import "../App.css";
 import { getItems } from "../API/ItemsAPI";
 import { Input, Card, Button, Modal } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import {
   addItemToBasket,
-  setAllItems
+  setAllItems,
+  setTotalPrice
 } from "../GlobalStateManagement/Actions/index";
+import { calculateTotal } from "../utils/utilsFunction";
 import { connect } from "react-redux";
 const { Search } = Input;
 
@@ -41,6 +43,10 @@ function MainPage(props) {
     setModalVisble(true);
     decrementItemInventory(itemIndex);
   };
+
+  useEffect(() => {
+    props.updateTotalPrice(calculateTotal(props.basket));
+  }, [props.basket]);
 
   //TODO: think about multi threading?
   const decrementItemInventory = index => {
@@ -128,7 +134,8 @@ const mapStateToProps = state => {
 function mapDispatchToProps(dispatch) {
   return {
     addItemToBasket: item => dispatch(addItemToBasket(item)),
-    setItemData: allItems => dispatch(setAllItems(allItems))
+    setItemData: allItems => dispatch(setAllItems(allItems)),
+    updateTotalPrice: newPrice => dispatch(setTotalPrice(newPrice))
   };
 }
 const ConnectedMainPage = connect(
