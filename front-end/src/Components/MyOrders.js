@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { getUserOrders } from "../API/OrderAPI";
+import { getItems } from "../API/ItemsAPI";
+import { setAllItems } from "../GlobalStateManagement/Actions/index";
 import { Card } from "antd";
+import { connect } from "react-redux";
 
-function MyOrders() {
+function MyOrders(props) {
   const [userID] = useState(0);
   const username = localStorage.getItem("username")
     ? localStorage.getItem("username")
     : null;
   const [userOrders, setUserOrder] = useState([]);
+  const [dict, setDict] = useState({});
 
   const gridStyle = {
     width: "100%",
@@ -18,7 +22,6 @@ function MyOrders() {
   function fetchUserOrder() {
     getUserOrders(username).then(reponse => {
       if (!reponse.error) {
-        console.log("response fetch Order", reponse);
         setUserOrder(reponse);
       } else {
         console.log("You have no order");
@@ -26,9 +29,49 @@ function MyOrders() {
     });
   }
 
+  const createDictFromAllItems = allItems => {
+    const dict = {};
+    if (allItems.length > 0) {
+      allItems.forEach(item => (dict[item.id] = item));
+    }
+    setDict(dict);
+  };
+
+  const fetchallItems = username => {
+    getItems(username).then(response => {
+      props.setItemData(response);
+      createDictFromAllItems(response);
+    });
+  };
+
   useEffect(() => {
-    fetchUserOrder();
+    fetchUserOrder(username);
+  }, [props.allItems]);
+
+  useEffect(() => {
+    if (props.allItems.length === 0) {
+      fetchallItems();
+    } else {
+      fetchUserOrder();
+      createDictFromAllItems(props.allItems);
+    }
   }, [userID]);
+
+  const generateOrderItems = orderedItems => {
+    return orderedItems.map(item => {
+      const i = dict[item.id];
+      if (i) {
+        return (
+          <Card>
+            <p>item name : {i.name}</p>
+            <p>Size: {i.size}</p>
+            <p>Category: {i.category}</p>
+            <p>Price: {i.price}</p>
+          </Card>
+        );
+      }
+    });
+  };
 
   const card = (
     <Card title="Your Order History">
@@ -43,6 +86,7 @@ function MyOrders() {
               <p>State : {order.city}</p>
               <p>Card Number : {order.card_number} </p>
               <p>Total price : {order.total_price} $</p>
+              {generateOrderItems(order.ordered_items)}
             </Card>
           </Card.Grid>
         </div>
@@ -68,4 +112,21 @@ function MyOrders() {
   );
 }
 
-export default MyOrders;
+const mapStateToProps = state => {
+  return {
+    allItems: state.ItemReducer.items.allItems
+  };
+};
+
+function mapDispatchToProps(dispatch) {
+  return {
+    setItemData: allItems => dispatch(setAllItems(allItems))
+  };
+}
+
+const ConnectedMyOrders = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MyOrders);
+
+export default ConnectedMyOrders;
