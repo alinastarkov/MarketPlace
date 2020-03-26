@@ -59,7 +59,7 @@ function MyOrders(props) {
 
   const generateOrderItems = orderedItems => {
     return orderedItems.map(item => {
-      const i = dict[item.id];
+      const i = dict[item.item_id];
       if (i) {
         return (
           <Card>
