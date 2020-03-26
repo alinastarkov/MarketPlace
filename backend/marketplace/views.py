@@ -83,7 +83,7 @@ class OrderView(APIView):
         if serializerOrder.is_valid():
             #update the inventory in the items
             for item_data in items_data:
-                item = Item.objects.get(id=item_data['id'])
+                item = Item.objects.get(id=item_data['item_id'])
                 new_inventory = item.inventory - item_data['quantity']
                 serializerItem = ItemSerializer(item, data={'inventory': new_inventory}, partial=True)
                 if serializerItem.is_valid():
