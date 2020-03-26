@@ -16,7 +16,7 @@ class Item(models.Model):
     inventory = models.PositiveSmallIntegerField(default=0)
 
 class OrderedProducts(models.Model):
-    id = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
+    id = models.CharField(max_length=40, primary_key = True)
     quantity = models.PositiveSmallIntegerField(default=0)
     price = models.PositiveSmallIntegerField(default=0)
 
