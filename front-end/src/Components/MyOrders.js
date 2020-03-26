@@ -67,6 +67,7 @@ function MyOrders(props) {
             <p>Size: {i.size}</p>
             <p>Category: {i.category}</p>
             <p>Price: {i.price}</p>
+            <p>Quantity: {item.quantity}</p>
           </Card>
         );
       }
