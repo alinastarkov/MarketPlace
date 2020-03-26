@@ -23,17 +23,18 @@ from rest_framework_jwt.views import obtain_jwt_token
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework_simplejwt import views as jwt_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', obtain_jwt_token),
     path('items/', views.item_list),
-    path('current_user/', views.current_user),
     path('signup/', views.UserList.as_view()),
     path('sell-item/', views.ItemView.as_view()),
     path('user/item/', views.ItemView.as_view()),
     path('checkout/', views.OrderView.as_view()),
-    path('user/orders/', views.OrderView.as_view())
+    path('user/orders/', views.OrderView.as_view()),
+    path('token/refresh/', jwt_views.TokenRefreshView.as_view()),
+    path('login/', views.ObtainTokenPairWithUsernameView.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

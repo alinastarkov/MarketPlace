@@ -5,17 +5,19 @@ from rest_framework.views import APIView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 from rest_framework.parsers import MultiPartParser, FormParser
-from .serializers import UserSerializer, UserSerializerWithToken, ItemSerializer, OrderSerializer, OrderedItemsSerializer
+from .serializers import UsernameTokenObtainPairSerializer, UserSerializerWithToken, ItemSerializer, OrderSerializer, OrderedItemsSerializer
 from .models import Item, Order
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from rest_framework_simplejwt.views import TokenObtainPairView
 import uuid 
 
-@api_view(['GET'])
-def current_user(request):
-    serializer = UserSerializer(request.user)
-    return Response(serializer.data)
+class ObtainTokenPairWithUsernameView(TokenObtainPairView):
+    serializer_class = UsernameTokenObtainPairSerializer
+    
 
 #get all the items to display, if there is a current user then we exclude those items the users are selling
 #else we display all the items
@@ -30,8 +32,6 @@ def item_list(request):
     serializer = ItemSerializer(item, many=True)
     return Response(serializer.data)
 
-
-#todo: SAME TOKEN!!!???
 class UserList(APIView):
     permission_classes = (permissions.AllowAny,)
     def post(self, request, format=None):
@@ -42,8 +42,6 @@ class UserList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ItemView(APIView):
-    #todo: change to authentication token can access only
-    permission_classes = (permissions.AllowAny,)
     def delete(self, request, format=None):
         item_name=request.data.get("item_name")
         Item.objects.get(name=item_name).delete()
@@ -76,7 +74,6 @@ class ItemView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class OrderView(APIView):
-    permission_classes = (permissions.AllowAny,)
     def post(self, request, format=None):
         items_data = request.data.copy().pop('ordered_items')
         serializerOrder = OrderSerializer(data=request.data)

@@ -1,10 +1,13 @@
 import axios from "axios";
 const API_URL = "http://localhost:8000";
-
+const token = localStorage.getItem("access");
 export function getItems(username) {
   const url = `${API_URL}/items/`;
   if (username) {
-    const param = { params: { username: username } };
+    const param = {
+      params: { username: username },
+      headers: { Authorization: "Bearer " + token }
+    };
     return axios.get(url, param).then(response => response.data);
   } else {
     return axios.get(url).then(response => response.data);
@@ -14,6 +17,7 @@ export function getItems(username) {
 export function postItem(data) {
   const config = {
     headers: {
+      Authorization: "Bearer " + token,
       "Content-Type": "multipart/form-data"
     }
   };
@@ -43,7 +47,10 @@ export function postItem(data) {
 
 export function getUserItems(username) {
   const url = `${API_URL}/user/item/`;
-  const param = { params: { username: username } };
+  const param = {
+    params: { username: username },
+    headers: { Authorization: "Bearer " + token }
+  };
   return axios.get(url, param).then(
     response => {
       return response.data;
@@ -57,7 +64,10 @@ export function getUserItems(username) {
 
 export function deleteUserItem(username, itemName) {
   const url = `${API_URL}/user/item/`;
-  const param = { data: { username: username, item_name: itemName } };
+  const param = {
+    data: { username: username, item_name: itemName },
+    headers: { Authorization: "Bearer " + token }
+  };
   return axios.delete(url, param).then(
     response => {
       return response.data;

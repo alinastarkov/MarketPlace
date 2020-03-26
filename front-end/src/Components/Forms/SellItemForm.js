@@ -126,7 +126,7 @@ function SellItemForm(props) {
     </Form>
   );
 
-  return !localStorage.getItem("token") ? (
+  return !localStorage.getItem("username") ? (
     <div>
       <h1>You need to sign in to sell item</h1>
     </div>

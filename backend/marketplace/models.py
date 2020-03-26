@@ -32,3 +32,4 @@ class Order(models.Model):
     card_number = models.CharField(max_length=50)
     ordered_items = models.ManyToManyField('OrderedProducts')
 
+

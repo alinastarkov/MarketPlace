@@ -76,7 +76,7 @@ function CheckOutForm(props) {
     </div>
   );
 
-  return !localStorage.getItem("token") ? (
+  return !localStorage.getItem("username") ? (
     <div>
       <h1>You need to sign in to check out item</h1>
     </div>

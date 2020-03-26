@@ -1,6 +1,7 @@
 
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.models import User
 from .models import Item, OrderedProducts, Order
 import uuid 
@@ -10,6 +11,17 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'last_name', 'email')
 
+class UsernameTokenObtainPairSerializer(TokenObtainPairSerializer):
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        refresh = self.get_token(self.user)
+        data['refresh'] = str(refresh)
+        data['access'] = str(refresh.access_token)
+
+        # Add extra responses here
+        data['username'] = self.user.username
+        return data
 class UserSerializerWithToken(serializers.ModelSerializer):
 
     token = serializers.SerializerMethodField()

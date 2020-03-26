@@ -11,7 +11,7 @@ export function Navbar() {
   const [signInVisible, setSigninPopup] = useState(false);
   const [signUpVisible, setSignupPopup] = useState(false);
   const [isSignedin, setSignin] = useState(
-    localStorage.getItem("token") ? true : false
+    localStorage.getItem("username") ? true : false
   );
   const [signInError, setSignInError] = useState(false);
   const [signUpError, setSignUpError] = useState(false);
@@ -29,8 +29,10 @@ export function Navbar() {
   const onCreateSignin = values => {
     UserManagement.login(values).then(reponse => {
       if (!reponse.error) {
-        localStorage.setItem("token", reponse.token);
-        localStorage.setItem("username", reponse.user.username);
+        console.log(reponse);
+        localStorage.setItem("access", reponse.access);
+        localStorage.setItem("username", reponse.username);
+        localStorage.setItem("refresh", reponse.refresh);
         setSignin(true);
         setSignInError(false);
         setSigninPopup(false);
@@ -47,8 +49,10 @@ export function Navbar() {
   const onCreateSignUp = values => {
     UserManagement.signup(values).then(reponse => {
       if (!reponse.error) {
-        localStorage.setItem("token", reponse.token);
+        console.log(reponse);
+        localStorage.setItem("access", reponse.access);
         localStorage.setItem("username", reponse.username);
+        localStorage.setItem("refresh", reponse.refresh);
         setSignin(true);
         setSignUpError(false);
         setSignupPopup(false);
