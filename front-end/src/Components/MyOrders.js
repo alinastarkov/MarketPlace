@@ -59,7 +59,7 @@ function MyOrders(props) {
 
   const generateOrderItems = orderedItems => {
     return orderedItems.map(item => {
-      const i = dict[item.id];
+      const i = dict[item.item_id];
       if (i) {
         return (
           <Card>
@@ -67,6 +67,7 @@ function MyOrders(props) {
             <p>Size: {i.size}</p>
             <p>Category: {i.category}</p>
             <p>Price: {i.price}</p>
+            <p>Quantity: {item.quantity}</p>
           </Card>
         );
       }

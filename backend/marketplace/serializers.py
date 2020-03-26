@@ -57,9 +57,10 @@ class ItemSerializer(serializers.ModelSerializer):
         fields = ['name', 'description', 'category', 'size', 'brand','price', 'image', 'inventory', 'id']
 
 class OrderedItemsSerializer(serializers.ModelSerializer):
+    id = uuid.uuid4()
     class Meta:
         model = OrderedProducts
-        fields = ['id', 'quantity', 'price']
+        fields = ['id', 'quantity', 'price', 'item_id']
 class OrderSerializer(serializers.ModelSerializer):
     ordered_items = OrderedItemsSerializer(many=True)
     id = uuid.uuid4()

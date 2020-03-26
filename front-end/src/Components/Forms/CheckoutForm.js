@@ -4,6 +4,7 @@ import { Form, Input, Button } from "antd";
 import { connect } from "react-redux";
 import TotalOrder from "../TotalOrder";
 import { postPayment } from "../../API/OrderAPI";
+import { setBasket } from "../../GlobalStateManagement/Actions/index";
 
 // TODO: AFTER LOG OUT SELL ITEM FORM IS NOT RERENDER => SYNCRONIZE IT
 
@@ -23,11 +24,15 @@ function CheckOutForm(props) {
       .then(values => {
         form.resetFields();
         values.ordered_items = props.basket.map(item => {
-          return { id: item.id, quantity: item.quantity, price: item.price };
+          return {
+            item_id: item.id,
+            quantity: item.quantity,
+            price: item.price
+          };
         });
         values.username = localStorage.getItem("username");
         values.total_price = props.totalPrice;
-        postPayment(values);
+        postPayment(values).then(() => props.updateBasket([]));
       })
       .catch(info => {
         console.log("Validate Failed:", info);
@@ -92,5 +97,14 @@ const mapStateToProps = state => {
   };
 };
 
-const ConnectedForm = connect(mapStateToProps)(CheckOutForm);
+function mapDispatchToProps(dispatch) {
+  return {
+    updateBasket: newItems => dispatch(setBasket(newItems))
+  };
+}
+
+const ConnectedForm = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CheckOutForm);
 export default ConnectedForm;
