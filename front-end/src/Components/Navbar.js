@@ -26,9 +26,10 @@ export function Navbar() {
     setSigninPopup(false);
   };
 
-  const onCreateSignin = values => {
-    UserManagement.login(values).then(reponse => {
+  const onCreateSignin = (values) => {
+    UserManagement.login(values).then((reponse) => {
       if (!reponse.error) {
+        console.log(reponse);
         localStorage.setItem("token", reponse.token);
         localStorage.setItem("username", reponse.user.username);
         setSignin(true);
@@ -44,8 +45,8 @@ export function Navbar() {
     setSignupPopup(false);
   };
 
-  const onCreateSignUp = values => {
-    UserManagement.signup(values).then(reponse => {
+  const onCreateSignUp = (values) => {
+    UserManagement.signup(values).then((reponse) => {
       if (!reponse.error) {
         localStorage.setItem("token", reponse.token);
         localStorage.setItem("username", reponse.username);
@@ -92,6 +93,10 @@ export function Navbar() {
         Logout
       </Menu.Item>
       <Menu.Item key="5">
+        {" "}
+        <Link to="/chat"> Chat </Link>
+      </Menu.Item>
+      <Menu.Item key="6">
         {" "}
         <Link to="/basket"> My Basket </Link>
       </Menu.Item>
