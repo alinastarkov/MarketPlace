@@ -53,11 +53,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if userInstance != None:
             serializer = MessageSerializer(data=data)
             if serializer.is_valid():
-                print("AAA");
                 serializer.save(user = userInstance)
             content = {
                 'command' : 'new_message',
-                'messages' : serializer.data
+                'messages' : serializer.data,
+                'user': username
             }
             await self.channel_layer.group_send(
                 self.room_group_name,

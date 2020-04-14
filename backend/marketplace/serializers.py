@@ -68,4 +68,4 @@ class MessageSerializer(serializers.ModelSerializer):
     id = uuid.uuid4()
     class Meta:
         model = Message
-        fields = ['id', 'content']
+        fields = ['id', 'content', 'created_date']
