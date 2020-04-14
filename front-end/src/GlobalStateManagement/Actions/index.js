@@ -1,29 +1,39 @@
-export const setUserItems = userItems => ({
+export const setUserItems = (userItems) => ({
   type: "SET_USER_ITEMS",
-  userItems
+  userItems,
 });
 
-export const setAllItems = allItems => ({
+export const setAllItems = (allItems) => ({
   type: "SET_ALL_ITEMS",
-  allItems
+  allItems,
 });
 
-export const addItemToBasket = newItem => ({
+export const addItemToBasket = (newItem) => ({
   type: "APPEND_ITEM",
-  newItem
+  newItem,
 });
 
-export const deleteItemToBasket = id => ({
+export const deleteItemToBasket = (id) => ({
   type: "DELETE_ITEM",
-  id
+  id,
 });
 
-export const setBasket = newItems => ({
+export const setBasket = (newItems) => ({
   type: "SET_BASKET",
-  newItems
+  newItems,
 });
 
-export const setTotalPrice = newPrice => ({
+export const setTotalPrice = (newPrice) => ({
   type: "SET_TOTAL_PRICE",
-  newPrice
+  newPrice,
+});
+
+export const setMessages = (messages) => ({
+  type: "SET_MESSAGES",
+  messages,
+});
+
+export const addMessage = (newMessage) => ({
+  type: "ADD_MESSAGE",
+  newMessage,
 });
