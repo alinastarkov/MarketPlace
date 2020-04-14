@@ -6,6 +6,7 @@ import {
   setMessages,
   addMessage,
 } from "../GlobalStateManagement/Actions/index";
+import "./Style/Chat.scss";
 
 const { TextArea } = Input;
 const username = localStorage.getItem("username")
@@ -100,11 +101,11 @@ function ChatComponent(props) {
   const renderMessages = () => {
     return props.messages.map((message, i) => {
       return (
-        <div key={i}>
+        <li key={i} className={message.user === username ? "me" : "them"}>
           <h4> {message.user}</h4>
-          <h4>{message.created_date}</h4>
           <p>{message.content}</p>
-        </div>
+          <h4>{message.created_date}</h4>
+        </li>
       );
     });
   };
@@ -118,8 +119,7 @@ function ChatComponent(props) {
       <div className="container">
         <h1>Chatting as {username}</h1>
         <h3>Displaying only the recent 50 messages</h3>
-
-        {renderMessages()}
+        <ul>{renderMessages()}</ul>
       </div>
       <div className="container message-form">
         <Comment content={<Editor onFinish={onFinish} />} />

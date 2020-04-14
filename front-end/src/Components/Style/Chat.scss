@@ -1,0 +1,93 @@
+$blue: rgb(0, 153, 255);
+$white: #fff;
+$grey: #eee;
+
+.chat {
+  height: 100vh;
+
+  .container {
+    padding: 0 30px;
+    height: 80%;
+    &.message-form {
+      height: 10%;
+      margin-top: 5%;
+    }
+  }
+
+  h1,
+  h3 {
+    margin-top: 0;
+    color: $blue;
+  }
+
+  ul {
+    list-style: none;
+    overflow-y: scroll;
+    margin: 0;
+    padding: 0;
+    height: 80%;
+  }
+
+  ul li {
+    clear: both;
+    display: block;
+    margin-bottom: 5px;
+    max-width: 47%;
+    min-width: 8%;
+
+    p {
+      border-radius: 8px;
+      padding: 5px 20px;
+      margin: 0;
+    }
+
+    .author {
+      color: grey;
+      display: inline-block;
+      text-align: center;
+      padding: 5px;
+      margin: 0 2%;
+      font-weight: 300;
+      font-size: 12px;
+    }
+  }
+
+  .them {
+    float: left;
+    text-align: left;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+    &:first-child {
+      border-top-left-radius: 15px;
+    }
+    &:last-child {
+      border-bottom-left-radius: 15px;
+    }
+
+    p {
+      background: $grey;
+    }
+  }
+
+  .me {
+    float: right;
+    text-align: right;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+    &:first-child {
+      border-top-left-radius: 15px;
+    }
+    &:last-child {
+      border-bottom-left-radius: 15px;
+    }
+
+    .author {
+      display: none;
+    }
+
+    p {
+      background: $blue;
+      color: $white;
+    }
+  }
+}
