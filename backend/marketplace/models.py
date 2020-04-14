@@ -1,8 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import User
 import uuid 
+from django.core.exceptions import ValidationError
+
 
 # Create your models here.
+def validate_content_message(content):
+    if (content == ""or content == None or content.isspace()):
+        raise ValidationError(
+            'Content is empty or invalid',
+            code = 'invalid',
+            params = {
+                'content' : content
+            }
+        )
 class Item(models.Model):
     id = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
     name = models.CharField(max_length=100)
@@ -33,3 +44,8 @@ class Order(models.Model):
     card_number = models.CharField(max_length=50)
     ordered_items = models.ManyToManyField('OrderedProducts')
 
+class Message(models.Model):
+    id = models.UUIDField(primary_key = True, default = uuid.uuid4, editable = False)
+    created_date = models.DateTimeField(auto_now_add = True, blank = True)
+    content = models.TextField(validators=[validate_content_message])
+    user = models.ForeignKey(User, default=1, on_delete=models.CASCADE)

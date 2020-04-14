@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth.models import User
-from .models import Item, OrderedProducts, Order
+from .models import Item, OrderedProducts, Order, Message
 import uuid 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -64,3 +64,8 @@ class OrderSerializer(serializers.ModelSerializer):
             order.ordered_items.add(op)
         return order
 
+class MessageSerializer(serializers.ModelSerializer):
+    id = uuid.uuid4()
+    class Meta:
+        model = Message
+        fields = ['id', 'content']

@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'marketplace'
+    'marketplace',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -72,7 +73,16 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'backend.wsgi.application'
+ASGI_APPLICATION = 'backend.routing.application'
 
+CHANNEL_LAYERS = {
+    'default' : {
+        'BACKEND' : 'channels_redis.core.RedisChannelLayer',
+        'config' : {
+            'hosts' : [('127.0.0.1', 6379)],
+        }
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -140,10 +150,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
-    #  'DEFAULT_PARSER_CLASSES': (
-    #     'rest_framework.parsers.FormParser',
-    #     'rest_framework.parsers.MultiPartParser'
-    #  )
 }
 
 JWT_AUTH = {
