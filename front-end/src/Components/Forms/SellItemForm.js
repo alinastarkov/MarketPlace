@@ -12,7 +12,6 @@ function SellItemForm(props) {
   var currentLocation = window.location.pathname;
   const index = currentLocation.slice(currentLocation.lastIndexOf("/") + 1);
   const isEdit = /^\d+$/.test(index);
-  console.log(props.userItems);
   const modifiedItem = isEdit ? props.userItems[index] : undefined;
   const [form] = Form.useForm();
   const [file, setFile] = useState(null);
@@ -24,29 +23,29 @@ function SellItemForm(props) {
     brand: modifiedItem ? modifiedItem.brand : "",
     category: modifiedItem ? modifiedItem.category : "",
     price: modifiedItem ? modifiedItem.price : "",
-    inventory: modifiedItem ? modifiedItem.inventory : ""
+    inventory: modifiedItem ? modifiedItem.inventory : "",
   };
 
   const layout = {
     labelCol: { span: 8 },
-    wrapperCol: { span: 16 }
+    wrapperCol: { span: 16 },
   };
 
   const handleUpload = ({ fileList }) => {
     setFile({ fileList });
   };
 
-  const normFile = e => {
+  const normFile = (e) => {
     if (Array.isArray(e)) {
       return e;
     }
     return e && e.fileList;
   };
 
-  const onFinish = v => {
+  const onFinish = (v) => {
     form
       .validateFields()
-      .then(values => {
+      .then((values) => {
         form.resetFields();
         values.username = localStorage.getItem("username");
         values.image = file.fileList[0].originFileObj;
@@ -56,7 +55,7 @@ function SellItemForm(props) {
         console.log("send request form: ", values);
         postItem(values).then(() => props.history.push("/"));
       })
-      .catch(info => {
+      .catch((info) => {
         console.log("Validate Failed:", info);
       });
   };
@@ -135,7 +134,7 @@ function SellItemForm(props) {
   );
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return { userItems: state.ItemReducer.items.userItems };
 };
 const ConnectedForm = connect(mapStateToProps)(SellItemForm);

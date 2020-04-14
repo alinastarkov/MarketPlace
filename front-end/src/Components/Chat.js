@@ -1,54 +1,57 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { WS_URL } from "../settings";
-import { message } from "antd";
+import { Comment, Form, Button, List, Input } from "antd";
+import { connect } from "react-redux";
+import {
+  setMessages,
+  addMessage,
+} from "../GlobalStateManagement/Actions/index";
 
+const { TextArea } = Input;
 const username = localStorage.getItem("username")
   ? localStorage.getItem("username")
   : null;
 
 var ws = new WebSocket(WS_URL);
 
-export default class ChatComponent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      message: "",
-      messages: [],
-    };
-    this.initWS();
-  }
+function ChatComponent(props) {
+  const [userID] = useState(0);
+  const [form] = Form.useForm();
 
-  initWS() {
+  useEffect(() => {
+    initWS();
+  }, [userID]);
+
+  const initWS = () => {
     ws.onmessage = (e) => {
       const parsedData = JSON.parse(e.data);
       console.log(parsedData);
-      this.OnMessage(parsedData.messages, parsedData.command);
+      OnMessage(parsedData);
     };
 
     ws.onopen = () => {
       console.log("WebSocket open");
-      this.sendMessage({ command: "fetch_messages", username: username });
+      sendMessage({ command: "fetch_messages", username: username });
     };
 
     ws.onerror = (e) => {
       console.log(e.message);
     };
-  }
+  };
 
-  OnMessage = (message, command) => {
+  const OnMessage = (parsedData) => {
+    const newMessage = parsedData.messages;
+    const command = parsedData.command;
     if (command === "get_all_messages") {
-      this.setState({
-        messages: message.reverse(),
-      });
+      props.setMessages(newMessage.reverse());
     }
     if (command === "new_message") {
-      this.setState({
-        messages: [...this.state.messages, message],
-      });
+      newMessage.user = parsedData.user;
+      props.addMessage(newMessage);
     }
   };
 
-  sendMessage = (messageObject) => {
+  const sendMessage = (messageObject) => {
     try {
       ws.send(JSON.stringify({ ...messageObject }));
     } catch (err) {
@@ -56,7 +59,7 @@ export default class ChatComponent extends Component {
     }
   };
 
-  scrollToBottom = () => {
+  const scrollToBottom = () => {
     // const chat = this.messagesEnd;
     // const scrollHeight = chat.scrollHeight;
     // const height = chat.clientHeight;
@@ -64,30 +67,40 @@ export default class ChatComponent extends Component {
     // chat.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
   };
 
-  messageChangeHandler = (event) => {
-    this.setState({
-      message: event.target.value,
-    });
+  const onFinish = (v) => {
+    form
+      .validateFields()
+      .then((values) => {
+        form.resetFields();
+        const messageObject = {
+          command: "new_message",
+          username: username,
+          content: values.chatMessage,
+        };
+        sendMessage(messageObject);
+      })
+      .catch((info) => {
+        console.log("Validate Failed:", info);
+      });
   };
 
-  sendMessageHandler = (e, message) => {
-    const messageObject = {
-      command: "new_message",
-      username: username,
-      content: message,
-    };
-    this.sendMessage(messageObject);
-    this.setState({
-      message: "",
-    });
+  const Editor = ({ onFinish }) => (
+    <Form form={form} onFinish={onFinish}>
+      <Form.Item name="chatMessage" rules={[{ required: true }]}>
+        <TextArea rows={4} />
+      </Form.Item>
+      <Form.Item>
+        <Button htmlType="submit" type="primary">
+          Add Comment
+        </Button>
+      </Form.Item>
+    </Form>
+  );
 
-    e.preventDefault();
-  };
-
-  renderMessages = () => {
-    return this.state.messages.map((message) => {
+  const renderMessages = () => {
+    return props.messages.map((message, i) => {
       return (
-        <div key={message.id}>
+        <div key={i}>
           <h4> {message.user}</h4>
           <h4>{message.created_date}</h4>
           <p>{message.content}</p>
@@ -96,45 +109,41 @@ export default class ChatComponent extends Component {
     });
   };
 
-  componentDidMount() {
-    this.scrollToBottom();
-  }
-  componentDidUpdate() {
-    this.scrollToBottom();
-  }
+  return username == null ? (
+    <div>
+      <h1>You need to log in to see your profile</h1>
+    </div>
+  ) : (
+    <div className="chat">
+      <div className="container">
+        <h1>Chatting as {username}</h1>
+        <h3>Displaying only the recent 50 messages</h3>
 
-  render() {
-    const messages = this.state.messages;
-    return username == null ? (
-      <div>
-        <h1>You need to log in to see your profile</h1>
+        {renderMessages()}
       </div>
-    ) : (
-      <div className="chat">
-        <div className="container">
-          <h1>Chatting as {username}</h1>
-          <h3>Displaying only the recent 50 messages</h3>
-
-          {messages && this.renderMessages()}
-        </div>
-        <div className="container message-form">
-          <form
-            onSubmit={(e) => this.sendMessageHandler(e, this.state.message)}
-            className="form"
-          >
-            <input
-              type="text"
-              onChange={this.messageChangeHandler}
-              value={this.state.message}
-              placeholder="Start Typing"
-              required
-            />
-            <button type="submit" className="submit" value="Submit">
-              Send
-            </button>
-          </form>
-        </div>
+      <div className="container message-form">
+        <Comment content={<Editor onFinish={onFinish} />} />
       </div>
-    );
-  }
+    </div>
+  );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    messages: state.MessageReducer.messages,
+  };
+};
+
+function mapDispatchToProps(dispatch) {
+  return {
+    setMessages: (messages) => dispatch(setMessages(messages)),
+    addMessage: (message) => dispatch(addMessage(message)),
+  };
+}
+
+const ConnectedChatComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ChatComponent);
+
+export default ConnectedChatComponent;
