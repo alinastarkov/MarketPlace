@@ -91,7 +91,7 @@ function SellItemForm(props) {
         <Form.Item name="price" noStyle>
           <InputNumber min={1} />
         </Form.Item>
-        <span className="ant-form-text"> Item</span>
+        <span className="ant-form-text"> $</span>
       </Form.Item>
       <Form.Item label="Number of Item">
         <Form.Item name="inventory" noStyle>

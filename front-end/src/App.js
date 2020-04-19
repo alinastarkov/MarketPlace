@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { Layout } from "antd";
+import { Layout, PageHeader } from "antd";
 import { Navbar } from "../src/Components/Navbar";
 import MainPage from "../src/Components/MainPage";
 import SellItemForm from "../src/Components/Forms/SellItemForm";
@@ -10,6 +10,7 @@ import CheckoutForm from "../src/Components/Forms/CheckoutForm";
 import MyOrder from "../src/Components/MyOrders";
 import ChatComponent from "../src/Components/Chat";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import HeaderImage from "../Images/1.jpg";
 
 import { createStore } from "redux";
 import { Provider } from "react-redux";
@@ -24,6 +25,10 @@ function App() {
       <Router>
         <Layout className="layout">
           <Navbar />
+          <div className="site-page-header">
+            <h1>Peluche</h1>
+          </div>
+          <img className="header-img" src={HeaderImage} />
           <Content style={{ padding: "0 50px" }}>
             <div className="site-layout-content">
               <Switch>
@@ -38,9 +43,9 @@ function App() {
               </Switch>
             </div>
           </Content>
-          <Footer style={{ textAlign: "center" }}>
+          {/* <Footer style={{ textAlign: "center" }}>
             ©2019 Created by Haylee Luu / Daphne Hegedus/ Jessica Liu with ♥
-          </Footer>
+          </Footer> */}
         </Layout>
       </Router>
     </Provider>

@@ -14,10 +14,44 @@
   text-align: center;
 }
 
+.ant-layout {
+  background: #ffffff;
+}
+
 .ant-menu-horizontal {
   line-height: 65px;
 }
 
 .menu-item-group {
   float: right;
+}
+
+.site-layout-content {
+  height: 100%;
+}
+
+.ant-card-bordered {
+  border: 0px !important;
+}
+
+.site-page-header {
+  text-align: center !important;
+  background-color: #fafafa;
+  width: 100vw;
+}
+
+.site-page-header > h1 {
+  font-size: 40px;
+  margin-top: 0.5%;
+  font-family: "Montserrat", sans-serif;
+  letter-spacing: 0.2em;
+}
+
+.header-img {
+  width: 100%;
+  height: auto;
+}
+
+.ant-layout-footer {
+  background-color: #ffffff;
 }

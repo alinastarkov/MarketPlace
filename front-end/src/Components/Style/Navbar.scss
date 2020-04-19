@@ -1,0 +1,42 @@
+$nav-background: #fafafa;
+$black: #000000;
+$highlight: #eee;
+$grey: #e0e1e3;
+.ant-menu-dark,
+.ant-menu-dark .ant-menu-sub {
+  background: $nav-background;
+}
+
+.ant-layout-header {
+  background: $nav-background;
+}
+
+.ant-menu-dark .ant-menu-item,
+.ant-menu-dark .ant-menu-item-group-title,
+.ant-menu-dark .ant-menu-item > a {
+  color: $black;
+}
+
+.ant-menu-dark,
+.ant-menu-dark .ant-menu-sub {
+  color: $black;
+}
+
+.ant-menu.ant-menu-dark .ant-menu-item-selected,
+.ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
+  opacity: 0;
+}
+
+.ant-menu-dark .ant-menu-item:hover > a,
+.ant-menu-dark .ant-menu-item-active > a {
+  color: $grey;
+}
+
+.ant-menu-dark .ant-menu-item:hover,
+.ant-menu-dark .ant-menu-item-active,
+.ant-menu-dark .ant-menu-submenu-active,
+.ant-menu-dark .ant-menu-submenu-open,
+.ant-menu-dark .ant-menu-submenu-selected,
+.ant-menu-dark .ant-menu-submenu-title:hover {
+  color: $grey;
+}

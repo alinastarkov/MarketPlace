@@ -4,6 +4,7 @@ import { SignInPopup } from "../Components/Popup/SignInPopup";
 import { SignUpPopup } from "../Components/Popup/SignUpPopup";
 import * as UserManagement from "../API/UserManagementAPI";
 import { Link } from "react-router-dom";
+import "./Style/Navbar.scss";
 const { Header } = Layout;
 const { SubMenu } = Menu;
 
@@ -15,6 +16,7 @@ export function Navbar() {
   );
   const [signInError, setSignInError] = useState(false);
   const [signUpError, setSignUpError] = useState(false);
+
   const handleSigninClick = () => {
     setSigninPopup(true);
   };
@@ -26,10 +28,16 @@ export function Navbar() {
     setSigninPopup(false);
   };
 
+  const refreshPage = () => {
+    window.location.reload(false);
+    console.log("window is refreshed");
+  };
+
   const onCreateSignin = (values) => {
     UserManagement.login(values).then((reponse) => {
       if (!reponse.error) {
         console.log(reponse);
+        refreshPage();
         localStorage.setItem("token", reponse.token);
         localStorage.setItem("username", reponse.user.username);
         setSignin(true);
@@ -50,6 +58,7 @@ export function Navbar() {
       if (!reponse.error) {
         localStorage.setItem("token", reponse.token);
         localStorage.setItem("username", reponse.username);
+        refreshPage();
         setSignin(true);
         setSignUpError(false);
         setSignupPopup(false);
@@ -63,6 +72,7 @@ export function Navbar() {
     setSignin(false);
     localStorage.removeItem("token");
     localStorage.removeItem("username");
+    refreshPage();
   };
 
   const generateSignInNav = (

@@ -6,7 +6,7 @@ import { ShoppingCartOutlined } from "@ant-design/icons";
 import {
   addItemToBasket,
   setAllItems,
-  setTotalPrice
+  setTotalPrice,
 } from "../GlobalStateManagement/Actions/index";
 import { calculateTotal } from "../utils/utilsFunction";
 import { connect } from "react-redux";
@@ -22,13 +22,13 @@ function MainPage(props) {
   const gridStyle = {
     width: "25%",
     height: "25%",
-    textAlign: "center"
+    textAlign: "center",
   };
 
   const handleItemSearch = () => {};
 
   const fetchallItems = () => {
-    getItems(username).then(response => {
+    getItems(username).then((response) => {
       props.setItemData(response);
       setItemData(response);
     });
@@ -38,7 +38,7 @@ function MainPage(props) {
     props.allItems.length === 0 ? setNoItem(true) : setNoItem(false);
   }, [props.allItems]);
 
-  const addItemToBasket = itemIndex => event => {
+  const addItemToBasket = (itemIndex) => (event) => {
     props.addItemToBasket(props.allItems[itemIndex]);
     setModalVisble(true);
     decrementItemInventory(itemIndex);
@@ -49,7 +49,7 @@ function MainPage(props) {
   }, [props.basket]);
 
   //TODO: think about multi threading?
-  const decrementItemInventory = index => {
+  const decrementItemInventory = (index) => {
     let clone = Object.assign({}, allItems[index]);
     const inventory = parseInt(clone.inventory);
     clone.inventory = inventory - 1;
@@ -63,7 +63,7 @@ function MainPage(props) {
   }, [userID]);
 
   const itemCard = (
-    <Card title="Available Item">
+    <div>
       {allItems.map((item, i) => (
         <div key={i}>
           <Card.Grid style={gridStyle}>
@@ -88,29 +88,26 @@ function MainPage(props) {
               </Button>
               {item.inventory <= 0 ? <p>OUT OF STOCK</p> : <p></p>}
               <p>Name : {item.name}</p>
-              <p>Description : {item.description}</p>
-              <p>Price : {item.price}</p>
               <p>Brand : {item.brand}</p>
-              <p>Category : {item.category}</p>
-              <p>Size : {item.size}</p>
+              <p>Price : {item.price}</p>
               <p>Number of Items Available : {item.inventory}</p>
             </Card>
           </Card.Grid>
         </div>
       ))}
-    </Card>
+    </div>
   );
   return (
     <div>
-      <h1>Welcome to the market place</h1>
-      <div className="searchButton">
+      <h1>Shop All Items</h1>
+      {/* <div className="searchButton">
         <Search
           placeholder="Sessun Navy Wool Coat"
           enterButton="Search"
           size="large"
           onSearch={handleItemSearch}
         />
-      </div>
+      </div> */}
       {noItem ? <h2>There is no available items right now</h2> : itemCard}
       <Modal
         title="Add Item Confirmation"
@@ -124,18 +121,18 @@ function MainPage(props) {
   );
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     basket: state.BasketReducer.basket,
-    allItems: state.ItemReducer.items.allItems
+    allItems: state.ItemReducer.items.allItems,
   };
 };
 
 function mapDispatchToProps(dispatch) {
   return {
-    addItemToBasket: item => dispatch(addItemToBasket(item)),
-    setItemData: allItems => dispatch(setAllItems(allItems)),
-    updateTotalPrice: newPrice => dispatch(setTotalPrice(newPrice))
+    addItemToBasket: (item) => dispatch(addItemToBasket(item)),
+    setItemData: (allItems) => dispatch(setAllItems(allItems)),
+    updateTotalPrice: (newPrice) => dispatch(setTotalPrice(newPrice)),
   };
 }
 const ConnectedMainPage = connect(
