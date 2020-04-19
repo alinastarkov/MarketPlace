@@ -10,7 +10,6 @@ import CheckoutForm from "../src/Components/Forms/CheckoutForm";
 import MyOrder from "../src/Components/MyOrders";
 import ChatComponent from "../src/Components/Chat";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import HeaderImage from "../Images/1.jpg";
 
 import { createStore } from "redux";
 import { Provider } from "react-redux";
@@ -28,7 +27,6 @@ function App() {
           <div className="site-page-header">
             <h1>Peluche</h1>
           </div>
-          <img className="header-img" src={HeaderImage} />
           <Content style={{ padding: "0 50px" }}>
             <div className="site-layout-content">
               <Switch>

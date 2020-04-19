@@ -10,6 +10,8 @@ import {
 } from "../GlobalStateManagement/Actions/index";
 import { calculateTotal } from "../utils/utilsFunction";
 import { connect } from "react-redux";
+import HeaderImage from "../../Images/1.jpg";
+
 const { Search } = Input;
 
 function MainPage(props) {
@@ -64,6 +66,7 @@ function MainPage(props) {
 
   const itemCard = (
     <div>
+      <h1>Shop All Items</h1>
       {allItems.map((item, i) => (
         <div key={i}>
           <Card.Grid style={gridStyle}>
@@ -99,7 +102,7 @@ function MainPage(props) {
   );
   return (
     <div>
-      <h1>Shop All Items</h1>
+      <img className="header-img" src={HeaderImage} />
       {/* <div className="searchButton">
         <Search
           placeholder="Sessun Navy Wool Coat"
