@@ -4,7 +4,7 @@ $grey: #eee;
 
 .chat {
   height: 100vh;
-
+  width: 70vw;
   .container {
     padding: 0 30px;
     height: 80%;
@@ -52,7 +52,7 @@ $grey: #eee;
     }
   }
 
-  .them {
+  .me {
     float: left;
     text-align: left;
     border-bottom-left-radius: 5px;
@@ -65,11 +65,12 @@ $grey: #eee;
     }
 
     p {
-      background: $grey;
+      background: $blue;
+      color: $white;
     }
   }
 
-  .me {
+  .them {
     float: right;
     text-align: right;
     border-bottom-left-radius: 5px;
@@ -86,8 +87,11 @@ $grey: #eee;
     }
 
     p {
-      background: $blue;
-      color: $white;
+      background: $grey;
     }
   }
+}
+
+.site-layout-content {
+  padding: 0px !important;
 }
