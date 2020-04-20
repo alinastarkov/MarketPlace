@@ -64,5 +64,9 @@ h1 {
 }
 
 p {
-  font-size: 18px;
+  font-size: 14px;
+}
+
+.title {
+  margin: 4vh 0px 4vh 0px;
 }

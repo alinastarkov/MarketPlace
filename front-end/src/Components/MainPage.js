@@ -66,7 +66,7 @@ function MainPage(props) {
 
   const itemCard = (
     <div>
-      <h1>Shop All Items</h1>
+      <h1 className="title">Shop All Items</h1>
       {allItems.map((item, i) => (
         <div key={i}>
           <Card.Grid style={gridStyle}>
