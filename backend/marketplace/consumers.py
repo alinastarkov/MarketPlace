@@ -3,12 +3,16 @@ from django.contrib.auth.models import User
 from .models import Message
 import json
 from .serializers import MessageSerializer
+from urllib.parse import parse_qs
 
 class ChatConsumer(AsyncWebsocketConsumer):
   
     async def connect(self):
-        self.room_name = 'marketplace'
+        print(self.scope['url_route'])
+        self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'chat_room_' + self.room_name
+        #self.room_name = 'marketplace'
+        #self.room_group_name = 'chat_room_' + self.room_name
 
         await self.channel_layer.group_add(
             self.room_group_name,
@@ -31,7 +35,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps(message))
     
     async def fetch_messages(self, data):
-        messages = Message.objects.order_by('-created_date').all()[:20]
+        room_name = data['room_name']
+        messages = Message.objects.order_by('-created_date').all().filter(room_name=room_name)[:50]
         messages_list = []
         for message in messages:
             messages_list.append({

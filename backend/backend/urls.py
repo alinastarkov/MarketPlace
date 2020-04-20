@@ -33,7 +33,8 @@ urlpatterns = [
     path('sell-item/', views.ItemView.as_view()),
     path('user/item/', views.ItemView.as_view()),
     path('checkout/', views.OrderView.as_view()),
-    path('user/orders/', views.OrderView.as_view())
+    path('user/orders/', views.OrderView.as_view()),
+    path('users/', views.get_all_users)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

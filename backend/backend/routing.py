@@ -4,7 +4,7 @@ from django.urls import re_path
 from marketplace import consumers
 
 websocket_urlpatterns = [
-    re_path(r'ws/chat$', consumers.ChatConsumer),
+   re_path(r'^ws/chat/(?P<room_name>[^/]+)/$', consumers.ChatConsumer),
 ]
 
 application = ProtocolTypeRouter({

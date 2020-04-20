@@ -8,7 +8,8 @@ import uuid
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'last_name', 'email')
+        fields = ('username', 'password', 'first_name',
+        'last_name')
 
 class UserSerializerWithToken(serializers.ModelSerializer):
 
@@ -68,4 +69,4 @@ class MessageSerializer(serializers.ModelSerializer):
     id = uuid.uuid4()
     class Meta:
         model = Message
-        fields = ['id', 'content', 'created_date']
+        fields = ['id', 'content', 'created_date', 'room_name']

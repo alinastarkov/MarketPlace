@@ -49,3 +49,4 @@ class Message(models.Model):
     created_date = models.DateTimeField(auto_now_add = True, blank = True)
     content = models.TextField(validators=[validate_content_message])
     user = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
+    room_name = models.CharField(max_length=50, default='')

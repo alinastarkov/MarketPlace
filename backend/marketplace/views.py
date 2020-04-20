@@ -34,8 +34,13 @@ def item_list(request):
     serializer = ItemSerializer(item, many=True)
     return Response(serializer.data)
 
-
-#todo: SAME TOKEN!!!???
+@api_view(['GET'])
+@permission_classes((permissions.AllowAny, ))
+def get_all_users(request):
+    all_users=User.objects.all()
+    serializer = UserSerializer(all_users, many=True)
+    return Response(serializer.data)
+    
 class UserList(APIView):
     permission_classes = (permissions.AllowAny,)
     def post(self, request, format=None):
