@@ -104,7 +104,7 @@ export function Navbar() {
       </Menu.Item>
       <Menu.Item key="5">
         {" "}
-        <Link to="/chat"> Chat </Link>
+        <Link to="/chatrooms"> Chat </Link>
       </Menu.Item>
       <Menu.Item key="6">
         {" "}

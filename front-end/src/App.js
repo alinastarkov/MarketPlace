@@ -8,7 +8,9 @@ import UserItemPage from "../src/Components/MyItemSell";
 import MyBasketPage from "../src/Components/MyBasket";
 import CheckoutForm from "../src/Components/Forms/CheckoutForm";
 import MyOrder from "../src/Components/MyOrders";
+import ChatRoomSelection from "../src/Components/ChatRoomSelection";
 import ChatComponent from "../src/Components/Chat";
+
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import { createStore } from "redux";
@@ -37,6 +39,7 @@ function App() {
                 <Route path="/basket" component={MyBasketPage}></Route>
                 <Route path="/checkout" component={CheckoutForm}></Route>
                 <Route path="/user-order" component={MyOrder}></Route>
+                <Route path="/chatrooms" component={ChatRoomSelection}></Route>
                 <Route path="/chat" component={ChatComponent}></Route>
               </Switch>
             </div>

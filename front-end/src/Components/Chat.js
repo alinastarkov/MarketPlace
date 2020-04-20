@@ -9,15 +9,15 @@ import {
 import "./Style/Chat.scss";
 
 const { TextArea } = Input;
-const username = localStorage.getItem("username")
-  ? localStorage.getItem("username")
-  : null;
-
-var ws = new WebSocket(WS_URL);
 
 function ChatComponent(props) {
+  const username = localStorage.getItem("username")
+    ? localStorage.getItem("username")
+    : null;
+  const roomName = props.location.state.roomName;
   const [userID] = useState(0);
   const [form] = Form.useForm();
+  var ws = new WebSocket(WS_URL + "/" + roomName + "/");
 
   useEffect(() => {
     initWS();
@@ -32,7 +32,11 @@ function ChatComponent(props) {
 
     ws.onopen = () => {
       console.log("WebSocket open");
-      sendMessage({ command: "fetch_messages", username: username });
+      sendMessage({
+        command: "fetch_messages",
+        username: username,
+        room_name: roomName,
+      });
     };
 
     ws.onerror = (e) => {
@@ -47,8 +51,17 @@ function ChatComponent(props) {
       props.setMessages(newMessage.reverse());
     }
     if (command === "new_message") {
+      console.log("New message");
+      console.log(newMessage);
+      console.log(props.messages);
       newMessage.user = parsedData.user;
-      props.addMessage(newMessage);
+      var duplicateFound = false;
+
+      if (!duplicateFound) {
+        props.addMessage(newMessage);
+      } else {
+        console.log("duplicate!!");
+      }
     }
   };
 
@@ -77,6 +90,7 @@ function ChatComponent(props) {
           command: "new_message",
           username: username,
           content: values.chatMessage,
+          room_name: roomName,
         };
         sendMessage(messageObject);
       })
@@ -117,7 +131,14 @@ function ChatComponent(props) {
   ) : (
     <div className="chat">
       <div className="container">
-        <h1>Chatting as {username}</h1>
+        {username === roomName ? (
+          <h1>Your seller chat room</h1>
+        ) : (
+          <div>
+            <h1> You're currently in the chatroom of seller {roomName} </h1>
+            <h3> Your username: {username}</h3>
+          </div>
+        )}
         <h3>Displaying only the recent 50 messages</h3>
         <ul>{renderMessages()}</ul>
       </div>
