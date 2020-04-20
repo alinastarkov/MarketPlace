@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Order confirmation</title>
+    <style>
+      .card {
+        font-family: "Helvetica Neue";
+        text-align: center;
+        margin: auto;
+        width: 40%;
+      }
+
+      .btn {
+        padding: 7px;
+        margin-bottom: 10px;
+        background: #993cf3;
+        color: #fff;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="card-body">
+        <h1>Thank you for your order! Here is the details of your order</h1>
+        <h2 class="card-text text-center">Here is the details of your order</h2>
+        <p>Name: {{name}}</p>
+        <p>Address: {{address}}</p>
+        <p>City: {{city}}</p>
+        <p>State: {{state}}</p>
+        <p>Country: {{country}}</p>
+        <p>Card Number: {{card}}</p>
+
+        <table>
+          <tr>
+            <th>Item Name</th>
+            <th>Brand</th>
+            <th>Quantity</th>
+            <th>Size</th>
+            <th>Price</th>
+          </tr>
+          {% for item in items_list %}
+          <tr>
+            <th>{{item.name}}</th>
+            <th>{{item.brand}}</th>
+            <th>{{item.quantity}}</th>
+            <th>{{item.size}}</th>
+            <th>{{item.price}}</th>
+          </tr>
+          {% endfor %}
+        </table>
+        <p class="text-center">Total : {{ total }} $</p>
+      </div>
+    </div>
+  </body>
+</html>
