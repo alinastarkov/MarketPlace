@@ -24,7 +24,7 @@ $grey: #e0e1e3;
 
 .ant-menu.ant-menu-dark .ant-menu-item-selected,
 .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
-  opacity: 0;
+  background-color: transparent;
 }
 
 .ant-menu-dark .ant-menu-item:hover > a,
