@@ -43,7 +43,6 @@
 .site-page-header > h1 {
   font-size: 40px;
   margin-top: 0.5%;
-  font-family: "Montserrat", sans-serif;
   letter-spacing: 0.2em;
 }
 
@@ -54,4 +53,16 @@
 
 .ant-layout-footer {
   background-color: #ffffff;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+}
+
+h1 {
+  font-size: 30px;
+}
+
+p {
+  font-size: 18px;
 }
