@@ -11,6 +11,10 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 import uuid 
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+from django.template.loader import render_to_string
+from backend.settings import SECRET_KEY, DOMAIN, EMAIL_HOST_PASSWORD
 
 @api_view(['GET'])
 def current_user(request):
@@ -79,6 +83,7 @@ class OrderView(APIView):
     permission_classes = (permissions.AllowAny,)
     def post(self, request, format=None):
         items_data = request.data.copy().pop('ordered_items')
+        email = request.data.get('email')
         serializerOrder = OrderSerializer(data=request.data)
         if serializerOrder.is_valid():
             #update the inventory in the items
@@ -88,12 +93,33 @@ class OrderView(APIView):
                 serializerItem = ItemSerializer(item, data={'inventory': new_inventory}, partial=True)
                 if serializerItem.is_valid():
                     serializerItem.save()
+                    item_data.update({'name': item.name, 'brand': item.brand, 'size': item.size})
                 else:
                     return Response(serializerItem.errors, status=status.HTTP_400_BAD_REQUEST)
              # save new order into the order db
             username = request.data.get("username")
             userInstance = User.objects.get(username=username)
             serializerOrder.save(user = userInstance)
+
+            context = {
+                'name': request.data.get('full_name'),
+                'address': request.data.get('address'),
+                'country': request.data.get('country'),
+                'city': request.data.get('city'),
+                'state': request.data.get('state'),
+                'card': request.data.get('card_number'),
+                'items_list': items_data, 
+                'total': request.data.get('total_price')
+            }
+           # send email confirmation
+            msg_html = render_to_string('email.html', context)
+            message = Mail(from_email='hayleeluu@gmail.com', to_emails=[email],  subject='Order Confirmation', html_content=msg_html)
+            try:
+                sg = SendGridAPIClient('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')
+                sg.send(message)
+            except Exception as e:
+                print(str(e))
+
             return Response(serializerOrder.data, status=status.HTTP_201_CREATED)
         return Response(serializerOrder.errors, status=status.HTTP_400_BAD_REQUEST)
     
