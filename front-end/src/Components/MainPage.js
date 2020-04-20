@@ -76,7 +76,7 @@ function MainPage(props) {
                 <img
                   alt="example"
                   src={require(`../../../backend/marketplace${item.image}`)}
-                  style={{ height: "300px" }}
+                  style={{ height: "auto" }}
                 />
               }
             >

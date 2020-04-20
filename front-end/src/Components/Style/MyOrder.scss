@@ -1,0 +1,29 @@
+.order-page hr {
+  height: 1px;
+  border: 0.5px solid #8c8c8c;
+}
+
+.order-page .ant-card-grid {
+  border-radius: 50px;
+}
+
+.order-page .ant-card-meta-title {
+  text-align: left;
+}
+
+.order-page .ant-card-body p {
+  text-align: left;
+}
+
+.order-page .ant-card-meta-description p {
+  text-align: left;
+}
+
+.order-page .ant-card-grid.ant-card-grid-hoverable {
+  margin-top: 30px !important;
+  border: 3px solid #f0f0f0 !important;
+}
+
+.order-page .ant-card-head-title {
+  font-size: 30px;
+}

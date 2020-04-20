@@ -6,25 +6,32 @@ import { connect } from "react-redux";
 import {
   deleteItemToBasket,
   setBasket,
-  setTotalPrice
+  setTotalPrice,
 } from "../GlobalStateManagement/Actions/index";
 import { Link } from "react-router-dom";
 import TotalOrder from "../Components/TotalOrder";
 import { calculateTotal } from "../utils/utilsFunction";
+import "./Style/MyBasket.scss";
 
+const { Meta } = Card;
 function MyBasket(props) {
   const [visible, setModalVisble] = useState(false);
-  const handleDeleteItem = item_id => event => {
+  const handleDeleteItem = (item_id) => (event) => {
     props.removeItemFromBasket(item_id);
   };
   const username = localStorage.getItem("username")
     ? localStorage.getItem("username")
     : null;
+  const gridStyle = {
+    width: "100%",
+    height: "25%",
+    textAlign: "center",
+  };
 
-  const incrementQuantity = index => event => {
+  const incrementQuantity = (index) => (event) => {
     let newArray = props.basket.slice();
     let basketItem = newArray[index];
-    let item = props.allItems.filter(item => item.id === basketItem.id);
+    let item = props.allItems.filter((item) => item.id === basketItem.id);
     if (item[0].inventory === basketItem.quantity) {
       setModalVisble(true);
     } else {
@@ -37,7 +44,7 @@ function MyBasket(props) {
     props.updateTotalPrice(calculateTotal(props.basket));
   }, [props.basket]);
 
-  const decrementQuantity = index => event => {
+  const decrementQuantity = (index) => (event) => {
     let newArray = props.basket.slice();
     let item = newArray[index];
     item.quantity--;
@@ -49,34 +56,41 @@ function MyBasket(props) {
   };
 
   const card = (
-    <div>
+    <div className="basket-page">
       {props.basket.map((item, i) => (
         <div key={i}>
-          <Card
-            cover={
-              <img
-                alt="example"
-                src={require(`../../../backend/marketplace${item.image}`)}
-                style={{ height: "300px", width: "150px" }}
-              />
-            }
-          >
-            <Button
-              onClick={handleDeleteItem(item.id)}
-              type="primary"
-              icon={<DeleteOutlined />}
-            >
-              {" "}
-              Remove
-            </Button>
-            <p>Name : {item.name}</p>
-            <p>Price : {item.price}</p>
-            <p>Brand : {item.brand}</p>
-            <p>Size : {item.size}</p>
+          <Card>
+            <Meta
+              title={item.name}
+              description={[
+                <div>
+                  <p>Price : {item.price}</p>
+                  <p>Brand : {item.brand}</p>
+                  <p>Quantity : {item.quantity}</p>
+                  <p>Size : {item.size}</p>
+                </div>,
+              ]}
+              avatar={
+                <img
+                  alt="example"
+                  src={require(`../../../backend/marketplace${item.image}`)}
+                  style={{ height: "150px" }}
+                />
+              }
+            ></Meta>
+            <div className="remove-button">
+              <Button
+                onClick={handleDeleteItem(item.id)}
+                type="primary"
+                icon={<DeleteOutlined />}
+              >
+                Remove
+              </Button>
+            </div>
             {item.quantity ? (
-              <span>
+              <span className="quantity-buttons">
                 <Button onClick={incrementQuantity(i)}>+</Button>
-                <p>Quantity: {item.quantity}</p>
+                <p className="quantity-text">Quantity: {item.quantity}</p>
                 <Button onClick={decrementQuantity(i)}>-</Button>
               </span>
             ) : (
@@ -93,17 +107,19 @@ function MyBasket(props) {
           </Card>
         </div>
       ))}
-      <TotalOrder />
     </div>
   );
 
   const content =
     props.basket.length > 0 ? (
-      <div>
-        {card}
-        <Button type="primary" size="large">
-          <Link to="/checkout">Check out</Link>
-        </Button>
+      <div className="basket-page">
+        <Card title="Your Basket Items">
+          <Card.Grid style={gridStyle}>{card}</Card.Grid>
+          <TotalOrder />
+          <Button type="primary" size="large">
+            <Link to="/checkout">Check out</Link>
+          </Button>
+        </Card>
       </div>
     ) : (
       <div>
@@ -120,18 +136,18 @@ function MyBasket(props) {
   );
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     basket: state.BasketReducer.basket,
-    allItems: state.ItemReducer.items.allItems
+    allItems: state.ItemReducer.items.allItems,
   };
 };
 
 function mapDispatchToProps(dispatch) {
   return {
-    removeItemFromBasket: item_id => dispatch(deleteItemToBasket(item_id)),
-    updateBasket: newItems => dispatch(setBasket(newItems)),
-    updateTotalPrice: newPrice => dispatch(setTotalPrice(newPrice))
+    removeItemFromBasket: (item_id) => dispatch(deleteItemToBasket(item_id)),
+    updateBasket: (newItems) => dispatch(setBasket(newItems)),
+    updateTotalPrice: (newPrice) => dispatch(setTotalPrice(newPrice)),
   };
 }
 

@@ -4,14 +4,14 @@ import { connect } from "react-redux";
 function TotalOrder(props) {
   return (
     <div>
-      <h1>Subtotal: {props.totalPrice}</h1>
+      <h1>Subtotal: {props.totalPrice} $</h1>
     </div>
   );
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    totalPrice: state.ItemReducer.items.totalPrice
+    totalPrice: state.ItemReducer.items.totalPrice,
   };
 };
 const ConnectedCalculateTotal = connect(mapStateToProps)(TotalOrder);

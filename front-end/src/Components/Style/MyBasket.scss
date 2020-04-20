@@ -1,0 +1,39 @@
+.remove-button {
+  display: flex;
+  width: 100%;
+}
+
+.quantity-buttons {
+  display: flex;
+  margin-top: 15px;
+}
+
+.quantity-text {
+  margin: 0px 10px 0px 10px;
+}
+
+.basket-page hr {
+  height: 1px;
+  border: 0.5px solid #8c8c8c;
+}
+
+.basket-page .ant-card-meta-title {
+  text-align: left;
+}
+
+.basket-page .ant-card-body p {
+  text-align: left;
+}
+
+.basket-page.ant-card-meta-description p {
+  text-align: left;
+}
+
+.basket-page .ant-card-grid.ant-card-grid-hoverable {
+  margin-top: 30px !important;
+  border: 3px solid #f0f0f0 !important;
+}
+
+.basket-page .ant-card-head-title {
+  font-size: 30px;
+}

@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import { getUserOrders } from "../API/OrderAPI";
 import { getItems } from "../API/ItemsAPI";
 import { setAllItems } from "../GlobalStateManagement/Actions/index";
-import { Card } from "antd";
+import { Card, Avatar } from "antd";
 import { connect } from "react-redux";
+import "./Style/MyOrder.scss";
+
+const { Meta } = Card;
 
 function MyOrders(props) {
   const [userID] = useState(0);
@@ -16,11 +19,11 @@ function MyOrders(props) {
   const gridStyle = {
     width: "100%",
     height: "25%",
-    textAlign: "center"
+    textAlign: "center",
   };
 
   function fetchUserOrder() {
-    getUserOrders(username).then(reponse => {
+    getUserOrders(username).then((reponse) => {
       if (!reponse.error) {
         setUserOrder(reponse);
       } else {
@@ -29,16 +32,16 @@ function MyOrders(props) {
     });
   }
 
-  const createDictFromAllItems = allItems => {
+  const createDictFromAllItems = (allItems) => {
     const dict = {};
     if (allItems.length > 0) {
-      allItems.forEach(item => (dict[item.id] = item));
+      allItems.forEach((item) => (dict[item.id] = item));
     }
     setDict(dict);
   };
 
-  const fetchallItems = username => {
-    getItems(username).then(response => {
+  const fetchallItems = (username) => {
+    getItems(username).then((response) => {
       props.setItemData(response);
       createDictFromAllItems(response);
     });
@@ -57,21 +60,38 @@ function MyOrders(props) {
     }
   }, [userID]);
 
-  const generateOrderItems = orderedItems => {
-    return orderedItems.map(item => {
-      const i = dict[item.item_id];
-      if (i) {
-        return (
-          <Card>
-            <p>item name : {i.name}</p>
-            <p>Size: {i.size}</p>
-            <p>Category: {i.category}</p>
-            <p>Price: {i.price}</p>
-            <p>Quantity: {item.quantity}</p>
-          </Card>
-        );
-      }
-    });
+  const generateOrderItems = (orderedItems) => {
+    return (
+      <div className="all-Order-item">
+        {orderedItems.map((item) => {
+          const i = dict[item.item_id];
+          if (i) {
+            return (
+              <Card size="small">
+                <Meta
+                  avatar={
+                    <img
+                      alt="example"
+                      src={require(`../../../backend/marketplace${i.image}`)}
+                      style={{ height: "150px" }}
+                    />
+                  }
+                  title={i.brand}
+                  description={[
+                    <div>
+                      <p>Name: {i.name}</p>
+                      <p>Quantity: {item.quantity}</p>
+                      <p>Size: {i.size}</p>
+                      <p>Price: {i.price}</p>
+                    </div>,
+                  ]}
+                ></Meta>
+              </Card>
+            );
+          }
+        })}
+      </div>
+    );
   };
 
   const card = (
@@ -87,6 +107,7 @@ function MyOrders(props) {
               <p>State : {order.city}</p>
               <p>Card Number : {order.card_number} </p>
               <p>Total price : {order.total_price} $</p>
+              <hr />
               {generateOrderItems(order.ordered_items)}
             </Card>
           </Card.Grid>
@@ -105,23 +126,23 @@ function MyOrders(props) {
     );
 
   return username == null ? (
-    <div>
+    <div className="order-page">
       <h1>You need to log in to see your order history</h1>
     </div>
   ) : (
-    content
+    <div className="order-page">{content}</div>
   );
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    allItems: state.ItemReducer.items.allItems
+    allItems: state.ItemReducer.items.allItems,
   };
 };
 
 function mapDispatchToProps(dispatch) {
   return {
-    setItemData: allItems => dispatch(setAllItems(allItems))
+    setItemData: (allItems) => dispatch(setAllItems(allItems)),
   };
 }
 

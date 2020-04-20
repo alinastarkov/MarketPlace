@@ -18,11 +18,11 @@ function ProfilePage(props) {
   const gridStyle = {
     width: "25%",
     height: "25%",
-    textAlign: "center"
+    textAlign: "center",
   };
 
-  const handleDeleteItem = itemIndex => event => {
-    deleteUserItem(username, userItem[itemIndex].name).then(reponse => {
+  const handleDeleteItem = (itemIndex) => (event) => {
+    deleteUserItem(username, userItem[itemIndex].name).then((reponse) => {
       if (!reponse.error) {
         fetchUserItem();
       } else {
@@ -32,7 +32,7 @@ function ProfilePage(props) {
   };
 
   function fetchUserItem() {
-    getUserItems(username).then(reponse => {
+    getUserItems(username).then((reponse) => {
       if (!reponse.error) {
         console.log("response fetch Item", reponse);
         setUserItem(reponse);
@@ -63,7 +63,7 @@ function ProfilePage(props) {
                 <img
                   alt="example"
                   src={require(`../../../backend/marketplace${item.image}`)}
-                  style={{ height: "300px" }}
+                  style={{ height: "450px" }}
                 />
               }
             >
@@ -112,7 +112,7 @@ function ProfilePage(props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    setGlobalUserItem: userItem => dispatch(setUserItems(userItem))
+    setGlobalUserItem: (userItem) => dispatch(setUserItems(userItem)),
   };
 }
 const ConnectedProfilePage = connect(null, mapDispatchToProps)(ProfilePage);
