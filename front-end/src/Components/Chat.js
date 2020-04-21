@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { WS_URL } from "../settings";
 import { Comment, Form, Button, List, Input } from "antd";
 import { connect } from "react-redux";
@@ -17,19 +17,21 @@ function ChatComponent(props) {
   const roomName = props.location.state.roomName;
   const [userID] = useState(0);
   const [form] = Form.useForm();
-  var ws = new WebSocket(WS_URL + "/" + roomName + "/");
+  const ws = useRef(null);
 
   useEffect(() => {
+    ws.current = new WebSocket(WS_URL + "/" + roomName + "/");
     initWS();
   }, [userID]);
 
   const initWS = () => {
-    ws.onmessage = (e) => {
+    ws.current.onmessage = (e) => {
       const parsedData = JSON.parse(e.data);
       console.log(parsedData);
+      OnMessage(parsedData);
     };
 
-    ws.onopen = () => {
+    ws.current.onopen = () => {
       console.log("WebSocket open");
       sendMessage({
         command: "fetch_messages",
@@ -38,7 +40,7 @@ function ChatComponent(props) {
       });
     };
 
-    ws.onerror = (e) => {
+    ws.current.onerror = (e) => {
       console.log(e.message);
     };
   };
@@ -66,7 +68,7 @@ function ChatComponent(props) {
 
   const sendMessage = (messageObject) => {
     try {
-      ws.send(JSON.stringify({ ...messageObject }));
+      ws.current.send(JSON.stringify({ ...messageObject }));
     } catch (err) {
       console.log(err.message);
     }
