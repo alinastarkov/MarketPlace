@@ -27,7 +27,6 @@ function ChatComponent(props) {
     ws.onmessage = (e) => {
       const parsedData = JSON.parse(e.data);
       console.log(parsedData);
-      OnMessage(parsedData);
     };
 
     ws.onopen = () => {
