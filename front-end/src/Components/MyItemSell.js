@@ -63,7 +63,7 @@ function ProfilePage(props) {
                 <img
                   alt="example"
                   src={require(`../../../backend/marketplace${item.image}`)}
-                  style={{ height: "450px" }}
+                  style={{ height: "auto" }}
                 />
               }
             >
@@ -91,7 +91,7 @@ function ProfilePage(props) {
       ))}
     </Card>
   );
-
+  // check for any items in the basket
   const content =
     userItem.length === 0 ? (
       <div>

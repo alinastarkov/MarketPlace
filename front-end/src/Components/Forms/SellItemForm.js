@@ -16,6 +16,15 @@ function SellItemForm(props) {
   const [form] = Form.useForm();
   const [file, setFile] = useState(null);
 
+  const defaultFileList = [
+    {
+      uid: "1",
+      name: "uploadimage",
+      status: "done",
+      url: "",
+    },
+  ];
+
   const fields = {
     name: modifiedItem ? modifiedItem.name : "",
     description: modifiedItem ? modifiedItem.description : "",
@@ -48,12 +57,16 @@ function SellItemForm(props) {
       .then((values) => {
         form.resetFields();
         values.username = localStorage.getItem("username");
-        values.image = file.fileList[0].originFileObj;
+        if (file === null) {
+          values.image = "";
+        } else {
+          values.image = file.fileList[0].originFileObj;
+        }
         if (modifiedItem) {
           values.id = modifiedItem.id;
         }
         console.log("send request form: ", values);
-        postItem(values).then(() => props.history.push("/"));
+        postItem(values).then(() => props.history.push("/user-item"));
       })
       .catch((info) => {
         console.log("Validate Failed:", info);
@@ -111,6 +124,7 @@ function SellItemForm(props) {
           listType="picture"
           onChange={handleUpload}
           beforeUpload={() => false}
+          defaultFileList={modifiedItem ? defaultFileList : null}
         >
           <Button>
             <UploadOutlined /> Click to upload

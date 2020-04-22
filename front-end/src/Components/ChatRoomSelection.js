@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getAllUsers } from "../API/UserManagementAPI";
 import { UserOutlined, StarOutlined } from "@ant-design/icons";
-import { Card, Avatar } from "antd";
+import { Card } from "antd";
 
 const { Meta } = Card;
 

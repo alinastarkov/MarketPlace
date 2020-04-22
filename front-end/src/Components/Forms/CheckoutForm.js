@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../App.css";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, Modal } from "antd";
 import { connect } from "react-redux";
 import TotalOrder from "../TotalOrder";
 import { postPayment } from "../../API/OrderAPI";
 import { setBasket } from "../../GlobalStateManagement/Actions/index";
+import { CheckCircleTwoTone } from "@ant-design/icons";
 
 // TODO: AFTER LOG OUT SELL ITEM FORM IS NOT RERENDER => SYNCRONIZE IT
 
@@ -12,31 +13,46 @@ function CheckOutForm(props) {
   // FOR EDIT FORM
 
   const [form] = Form.useForm();
+  const [modalVisible, setModalVisble] = useState(false);
 
   const layout = {
     labelCol: { span: 8 },
-    wrapperCol: { span: 16 }
+    wrapperCol: { span: 16 },
   };
 
-  const onFinish = v => {
+  const onFinish = (v) => {
     form
       .validateFields()
-      .then(values => {
+      .then((values) => {
         form.resetFields();
-        values.ordered_items = props.basket.map(item => {
+        values.ordered_items = props.basket.map((item) => {
           return {
             item_id: item.id,
             quantity: item.quantity,
-            price: item.price
+            price: item.price,
           };
         });
         values.username = localStorage.getItem("username");
         values.total_price = props.totalPrice;
-        postPayment(values).then(() => props.updateBasket([]));
+        postPayment(values)
+          .then(() => props.updateBasket([]))
+          .then(() => {
+            setModalVisble(true);
+          });
       })
-      .catch(info => {
+      .catch((info) => {
         console.log("Validate Failed:", info);
       });
+  };
+
+  const handleCancel = () => {
+    setModalVisble(false);
+    props.history.push("/");
+  };
+
+  const handleOk = () => {
+    setModalVisble(false);
+    props.history.push("/user-order");
   };
 
   const formSell = (
@@ -78,6 +94,21 @@ function CheckOutForm(props) {
         </Form.Item>
       </Form>
       <TotalOrder />
+      <Modal
+        title="Order Confirmation"
+        okText="Go to your order history"
+        cancelText="Go to main page"
+        visible={modalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <CheckCircleTwoTone
+          twoToneColor="#52c41a"
+          style={{ fontSize: "40px" }}
+        />
+        <p>Your order has been successfully placed.</p>
+        <p>An email with your order detail was sent to your email address</p>
+      </Modal>
     </div>
   );
 
@@ -90,16 +121,16 @@ function CheckOutForm(props) {
   );
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     basket: state.BasketReducer.basket,
-    totalPrice: state.ItemReducer.items.totalPrice
+    totalPrice: state.ItemReducer.items.totalPrice,
   };
 };
 
 function mapDispatchToProps(dispatch) {
   return {
-    updateBasket: newItems => dispatch(setBasket(newItems))
+    updateBasket: (newItems) => dispatch(setBasket(newItems)),
   };
 }
 

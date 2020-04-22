@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getUserOrders } from "../API/OrderAPI";
 import { getItems } from "../API/ItemsAPI";
 import { setAllItems } from "../GlobalStateManagement/Actions/index";
-import { Card, Avatar } from "antd";
+import { Card } from "antd";
 import { connect } from "react-redux";
 import "./Style/MyOrder.scss";
 

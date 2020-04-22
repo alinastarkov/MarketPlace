@@ -66,15 +66,25 @@ class ItemView(APIView):
 
     def post(self, request, format=None):
         parser_classes = (MultiPartParser, FormParser)
+        #find the item with the same id to determine if its an update or not
         try:
             item_id = request.data.get('id')
             itemModel = Item.objects.get(id=item_id)
-            serializer = ItemSerializer(itemModel, data=request.data)
+            img_field_req = request.data.get('image')
+            #retrive the old image request if we user didnt upload new image
+            if (img_field_req == "" or img_field_req == None or img_field_req.isspace()):
+                newData = request.data.copy()
+                newData.update({"image": itemModel.image})
+                serializer = ItemSerializer(itemModel, data=newData)
+            else:
+                #if there is an image field the update 
+                serializer = ItemSerializer(itemModel, data=request.data)
         except (ObjectDoesNotExist, ValidationError, ValueError) as e:
+            #if this is a new item then we simply create on in the db
             new_data = request.data.copy() # to make it mutable
             new_data['id'] = uuid.uuid4()
             serializer = ItemSerializer(data=new_data)
-
+        #save 
         if serializer.is_valid():
             username = request.data.get("username")
             userInstance = User.objects.get(username=username)
@@ -87,6 +97,7 @@ class ItemView(APIView):
 class OrderView(APIView):
     permission_classes = (permissions.AllowAny,)
     def post(self, request, format=None):
+        #find the item list to update the inventory
         items_data = request.data.copy().pop('ordered_items')
         email = request.data.get('email')
         serializerOrder = OrderSerializer(data=request.data)
@@ -105,7 +116,7 @@ class OrderView(APIView):
             username = request.data.get("username")
             userInstance = User.objects.get(username=username)
             serializerOrder.save(user = userInstance)
-
+            # context object for the email html template
             context = {
                 'name': request.data.get('full_name'),
                 'address': request.data.get('address'),
