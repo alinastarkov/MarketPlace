@@ -10,7 +10,7 @@
 6. Install yarn/ npm (if needed)
 7. Install front-end dependencies: cd front-end && npm install 
 8. Start front-end: yarn start
-9: Start redis server: redis-server 
+9. Start redis server: redis-server 
 
 ##### Note: Venv can be terminated by typing deactivate 
 10. Install openssl if necessary: brew install openssl
