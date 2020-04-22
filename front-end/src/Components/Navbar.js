@@ -58,7 +58,6 @@ export function Navbar() {
       if (!reponse.error) {
         localStorage.setItem("token", reponse.token);
         localStorage.setItem("username", reponse.username);
-        refreshPage();
         setSignin(true);
         setSignUpError(false);
         setSignupPopup(false);
