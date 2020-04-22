@@ -72,7 +72,7 @@ class ItemView(APIView):
             itemModel = Item.objects.get(id=item_id)
             img_field_req = request.data.get('image')
             #retrive the old image request if we user didnt upload new image
-            if (img_field_req == "" or img_field_req == None or img_field_req.isspace()):
+            if (img_field_req == "" or img_field_req == None):
                 newData = request.data.copy()
                 newData.update({"image": itemModel.image})
                 serializer = ItemSerializer(itemModel, data=newData)
