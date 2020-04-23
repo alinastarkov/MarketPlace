@@ -55,6 +55,10 @@
   background-color: #ffffff;
 }
 
+.ant-form {
+  margin-top: 30px;
+}
+
 body {
   font-family: "Montserrat", sans-serif;
 }

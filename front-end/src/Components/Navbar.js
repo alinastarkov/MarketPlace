@@ -88,7 +88,7 @@ export function Navbar() {
         <Link to="/sell">Sell your clothes </Link>
       </Menu.Item>
       <SubMenu
-        title={<span className="submenu-title-wrapper">My profile</span>}
+        title={<span className="submenu-title-wrapper">My account</span>}
       >
         <Menu.Item key="setting:1">
           <Link to="/user-item"> Items you're selling </Link>
@@ -96,7 +96,6 @@ export function Navbar() {
         <Menu.Item key="setting:2">
           <Link to="/user-order"> Your order history </Link>
         </Menu.Item>
-        <Menu.Item key="setting:3">Your Profile</Menu.Item>
       </SubMenu>
       <Menu.Item key="4" onClick={handleLogout}>
         Logout
@@ -119,7 +118,10 @@ export function Navbar() {
       mode="horizontal"
       defaultSelectedKeys={["1"]}
     >
-      <Menu.Item key="1" onClick={handleSigninClick}>
+      <Menu.Item key="1">
+        <Link to="/">Home </Link>
+      </Menu.Item>
+      <Menu.Item key="2" onClick={handleSigninClick}>
         Sign in
       </Menu.Item>
       <SignInPopup
@@ -128,7 +130,7 @@ export function Navbar() {
         onCancel={onCancelSignin}
         hasError={signInError}
       />
-      <Menu.Item key="2" onClick={handleSignupClick}>
+      <Menu.Item key="3" onClick={handleSignupClick}>
         Sign up
       </Menu.Item>
       <SignUpPopup
@@ -137,7 +139,7 @@ export function Navbar() {
         onCancel={onCancelSignUp}
         hasError={signUpError}
       />
-      <Menu.Item key="3">Your basket</Menu.Item>
+      <Menu.Item key="4">Your basket</Menu.Item>
     </Menu>
   );
 
