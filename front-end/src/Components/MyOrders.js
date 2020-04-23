@@ -119,7 +119,7 @@ function MyOrders(props) {
   const content =
     userOrders.length === 0 ? (
       <div>
-        <h1> You don't have any item</h1>
+        <h1> You don't have any order</h1>
       </div>
     ) : (
       card
