@@ -81,7 +81,7 @@ class OrderViewTest(APITestCase):
     
     def test_create_order(self):
         i = Item.objects.create(user=self.user, name='aaa', description= 'www', category= 'ccc', size= 's', brand= 'aritzia', price= 500, inventory= 4, image=self.get_image_file())
-        data={'username':'alinastarkov', 'full_name':'Alina', 'address':'379', 'country':'Canada', 'state':'BC', 'city':'Whistler', 'total_price': 900, 'card_number':'123A', 'ordered_items': [{'item_id':str(i.id), 'quantity':1, 'price':500 }]}
+        data={'username':'alinastarkov', 'full_name':'Alina', 'address':'379', 'country':'Canada', 'state':'BC', 'city':'Whistler', 'email':'ngoc.luu2@mail.mcgill.ca','total_price': 900, 'card_number':'123A', 'ordered_items': [{'item_id':str(i.id), 'quantity':1, 'price':500 }]}
         response = self.client.post('/checkout/', json.dumps(data), content_type='application/json' )
         self.assertEqual(201, response.status_code)
 
