@@ -2,7 +2,7 @@
 
 ## How to run the web app
 
-###The directory will look like this from root view:
+The directory will look like this from root view:
 ```bash
 ├── StockPhotos
 ├── backend
