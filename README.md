@@ -25,7 +25,7 @@ The directory will look like this from root view:
 4. Make migration to the database: cd backend && python3 manage.py makemigrations && python3 manage.py migrate
 5. Start backend: python3 manage.py runserver
 6. Install yarn/ npm (if needed): brew install node (to install node), brew install yarn (to install yarn) 
-7. Install front-end dependencies in **the front-end folder**: npm install 
+7. In a new terminal, install front-end dependencies in **the front-end folder**: cd front-end && npm install 
 8. Start front-end in **the front-end folder**: yarn start
 9. Start redis server in a different terminal: redis-server 
 
