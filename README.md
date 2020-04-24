@@ -19,7 +19,7 @@ The directory will look like this from root view:
     └── src
  ```
 
-1. Install venv: python3 -m venv ./env
+1. Install venv **in the root directory where requirements.txt is** : python3 -m venv ./env
 2. Activate virtual environment: source env/bin/activate
 3. Install requirements: pip3 install -r requirements.txt
 4. Make migration to the database: cd backend && python3 manage.py makemigrations && python3 manage.py migrate
