@@ -1,6 +1,12 @@
-# MarketPlace
+## Introduction
+Peluche is an e-commerce platform built with **React.js and Redux** for the frontend and **Django** for the backend.
+#### Functionality
+- Users can list products to sell and buy from other sellers.
+- Sellers can track inventories, add, update, and delete product listings.
+- Buyers can browse products, add products to cart, check out, and view order history.
+- Buyers can chat with sellers in real time.
 
-## How to run the web app
+## Installation 
 
 The directory will look like this from root view:
 ```bash
