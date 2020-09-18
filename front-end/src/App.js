@@ -44,9 +44,6 @@ function App() {
               </Switch>
             </div>
           </Content>
-          {/* <Footer style={{ textAlign: "center" }}>
-            ©2019 Created by Haylee Luu / Daphne Hegedus/ Jessica Liu with ♥
-          </Footer> */}
         </Layout>
       </Router>
     </Provider>
