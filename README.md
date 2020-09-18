@@ -35,11 +35,10 @@ The directory will look like this from root view:
 7. In a new terminal, install front-end dependencies in **the front-end folder**: cd front-end && npm install 
 8. Start front-end in **the front-end folder**: yarn start
 9. Start redis server in a different terminal: redis-server 
-
-##### Note: Venv can be terminated by the command deactivate 
 10. Install openssl if necessary: brew install openssl
 11. Install redis if neccessary: brew install redis 
 
-##### Note: There is a StockPhotos folder which contains all the stock photo to test the sell item feature.
+##### Note 1: Venv can be terminated by the command deactivate 
+##### Note 2: There is a StockPhotos folder which contains all the stock photo to test the sell item feature.
 
 
